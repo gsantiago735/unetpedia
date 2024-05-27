@@ -6,6 +6,8 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.centerTitle = true,
+    this.isBoldTitle = false,
+    this.needsGoback = true,
     this.titleColor = Colors.white,
     this.leadingIconColor = Colors.white,
     this.backgroundColor = ConstantColors.cff141718,
@@ -16,6 +18,8 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool centerTitle;
   final String title;
   final Color titleColor;
+  final bool isBoldTitle;
+  final bool needsGoback;
   final Color leadingIconColor;
   final Color backgroundColor;
   final VoidCallback? onBack;
@@ -34,26 +38,28 @@ class _MainAppBarState extends State<MainAppBar> {
     return AppBar(
       centerTitle: widget.centerTitle,
       backgroundColor: widget.backgroundColor,
-      surfaceTintColor: Colors.red,
+      surfaceTintColor: widget.backgroundColor,
       actions: widget.actions,
-      //leading: IconButton(
-      //  icon: Icon(
-      //    Icons.arrow_back_ios_new_rounded,
-      //    color: widget.leadingIconColor,
-      //  ),
-      //  style: const ButtonStyle(
-      //    backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-      //  ),
-      //  onPressed: (widget.onBack != null)
-      //      ? widget.onBack
-      //      : () => Navigator.maybePop(context),
-      //),
+      leading: (widget.needsGoback)
+          ? IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: widget.leadingIconColor,
+              ),
+              style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+              ),
+              onPressed: (widget.onBack != null)
+                  ? widget.onBack
+                  : () => Navigator.maybePop(context),
+            )
+          : null,
       title: Text(
         widget.title,
         style: TextStyle(
-          fontSize: 28,
+          fontSize: widget.isBoldTitle ? 28 : 22,
           color: widget.titleColor,
-          fontWeight: FontWeight.w800,
+          fontWeight: widget.isBoldTitle ? FontWeight.w800 : FontWeight.w600,
         ),
       ),
     );

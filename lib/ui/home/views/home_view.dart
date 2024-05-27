@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:unetpedia/ui/home/home.dart';
-import 'package:unetpedia/widgets/main_appbar.dart';
+import 'package:unetpedia/ui/subjects/subjects.dart';
+import 'package:unetpedia/widgets/widgets.dart';
 import 'package:unetpedia/core/constants/constants.dart';
 
 class HomeView extends StatelessWidget {
-  static const String routeName = 'home_view';
-
   const HomeView({super.key});
+  static const String routeName = 'home_view';
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +14,18 @@ class HomeView extends StatelessWidget {
       appBar: MainAppBar(
         title: "Unetpedia",
         centerTitle: false,
+        isBoldTitle: true,
+        needsGoback: false,
         actions: [
           _GenericButton(
             icon: Icons.drag_handle_rounded,
             onPressed: () {},
           ),
-          const SizedBox(width: 10),
-          _GenericButton(
-            icon: Icons.notifications_outlined,
-            onPressed: () {},
-          ),
+          //const SizedBox(width: 10),
+          //_GenericButton(
+          //  icon: Icons.notifications_outlined,
+          //  onPressed: () {},
+          //),
           const SizedBox(width: 20),
         ],
       ),
@@ -32,9 +34,11 @@ class HomeView extends StatelessWidget {
           const _Header(),
           const SizedBox(height: 28),
           HomeSectionCard(
-            title: "Materias",
+            title: "Asignaturas",
             description: "Encuentra el contenido de cada materia.",
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, SubjectsView.routeName);
+            },
           ),
           const SizedBox(height: 20),
           HomeSectionCard(
@@ -59,17 +63,8 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-      decoration: const BoxDecoration(
-        color: ConstantColors.cff141718,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(16),
-          bottomRight: Radius.circular(16),
-        ),
-      ),
-      child: const Column(
+    return const AppBarLayout(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

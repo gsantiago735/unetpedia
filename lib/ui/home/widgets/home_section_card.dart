@@ -47,6 +47,7 @@ class HomeSectionCard extends StatelessWidget {
                       Text(
                         title,
                         maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -57,6 +58,7 @@ class HomeSectionCard extends StatelessWidget {
                       Text(
                         description,
                         maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.white,

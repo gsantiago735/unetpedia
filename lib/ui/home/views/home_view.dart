@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unetpedia/ui/home/home.dart';
-import 'package:unetpedia/ui/subjects/subjects.dart';
 import 'package:unetpedia/widgets/widgets.dart';
-import 'package:unetpedia/core/constants/constants.dart';
+import 'package:unetpedia/ui/departments/departments.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -17,7 +16,7 @@ class HomeView extends StatelessWidget {
         isBoldTitle: true,
         needsGoback: false,
         actions: [
-          _GenericButton(
+          GenericIconButton(
             icon: Icons.drag_handle_rounded,
             onPressed: () {},
           ),
@@ -37,7 +36,7 @@ class HomeView extends StatelessWidget {
             title: "Asignaturas",
             description: "Encuentra el contenido de cada materia.",
             onPressed: () {
-              Navigator.pushNamed(context, SubjectsView.routeName);
+              Navigator.pushNamed(context, DepartmentsView.routeName);
             },
           ),
           const SizedBox(height: 20),
@@ -86,31 +85,6 @@ class _Header extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _GenericButton extends StatelessWidget {
-  const _GenericButton({required this.icon, this.onPressed});
-
-  final IconData icon;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton.filled(
-      onPressed: onPressed,
-      icon: Icon(icon),
-      iconSize: 24,
-      //visualDensity: VisualDensity.compact,
-      color: ConstantColors.cff141718,
-      style: ButtonStyle(
-        backgroundColor: const MaterialStatePropertyAll(Colors.white),
-        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(width: 2, color: Color(0xFFD9D9D9)),
-        )),
       ),
     );
   }

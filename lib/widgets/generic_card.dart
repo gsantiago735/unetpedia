@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:unetpedia/widgets/buttons/generic_icon_button.dart';
+import 'package:unetpedia/core/constants/constant_colors.dart';
 
-class SubjectCard extends StatelessWidget {
-  const SubjectCard({
-    super.key,
-    required this.title,
-    required this.onPressed,
-    this.onDownload,
-    this.onWatch,
-  });
+class GenericCard extends StatelessWidget {
+  const GenericCard(
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      required this.onPressed});
 
   final String title;
+  final String subtitle;
   final VoidCallback onPressed;
-  final VoidCallback? onDownload;
-  final VoidCallback? onWatch;
 
   @override
   Widget build(BuildContext context) {
@@ -52,31 +49,43 @@ class SubjectCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
                     Flexible(
-                      child: Text(
-                        title,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 4,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            subtitle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF64748B),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 12),
-              Row(
+              const Row(
                 children: [
-                  GenericIconButton(
-                    icon: Icons.download_rounded,
-                    onPressed: () {},
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: ConstantColors.cff141718,
                   ),
-                  //const SizedBox(width: 12),
-                  GenericIconButton(
-                    icon: Icons.visibility_rounded,
-                    onPressed: () {},
-                  ),
+                  SizedBox(width: 12),
                 ],
               )
             ],

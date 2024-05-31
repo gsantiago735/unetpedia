@@ -10,7 +10,7 @@ class AppBarLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      padding: const EdgeInsets.fromLTRB(24, 14, 24, 24),
       decoration: const BoxDecoration(
         color: ConstantColors.cff141718,
         borderRadius: BorderRadius.only(

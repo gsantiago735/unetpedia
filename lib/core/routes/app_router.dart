@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:unetpedia/ui/subjects/views/subjects_view.dart';
 import 'package:unetpedia/ui/ui.dart';
 
 class AppRouter {
@@ -7,11 +6,20 @@ class AppRouter {
     '/': (BuildContext contex) => const App(),
 
     // Authentication
+    LoginView.routeName: (BuildContext contex) => const LoginView(),
+    RegisterView.routeName: (BuildContext contex) => const RegisterView(),
+    ForgotPasswordView.routeName: (BuildContext contex) =>
+        const ForgotPasswordView(),
 
     // Home
     HomeView.routeName: (BuildContext contex) => const HomeView(),
 
+    // Departments
+    DepartmentsView.routeName: (BuildContext contex) => const DepartmentsView(),
+
     // Subjects
     SubjectsView.routeName: (BuildContext contex) => const SubjectsView(),
+    SubjectDetailView.routeName: (BuildContext contex) =>
+        const SubjectDetailView(),
   };
 }

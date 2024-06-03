@@ -29,4 +29,17 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
     emit(state.copyWith(status: WidgetStatus.error));
   }
+
+  // ========================================================================
+  // Basic Register
+  // ========================================================================
+
+  Future<void> register() async {
+    if (state.status == WidgetStatus.loading) return;
+    emit(state.copyWith(status: WidgetStatus.loading));
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    emit(state.copyWith(status: WidgetStatus.error));
+  }
 }

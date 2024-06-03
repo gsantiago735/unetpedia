@@ -7,17 +7,20 @@ class FormInput extends StatelessWidget {
     this.hintText,
     this.labelText = "Label",
     this.obscureText = false,
+    this.readOnly = false,
     this.prefixIcon,
     this.suffixIcon,
     this.controller,
     required this.textInputType,
     this.validator,
     this.onChange,
+    this.onPressed,
   });
 
   final String? hintText;
   final String labelText;
   final bool obscureText;
+  final bool readOnly;
   final IconData? prefixIcon;
   final Widget? suffixIcon;
 
@@ -26,6 +29,7 @@ class FormInput extends StatelessWidget {
 
   final void Function(String)? onChange;
   final String? Function(String?)? validator;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,8 @@ class FormInput extends StatelessWidget {
           obscureText: obscureText,
           validator: validator,
           keyboardType: textInputType,
+          onTap: onPressed,
+          readOnly: readOnly,
           textCapitalization: TextCapitalization.sentences,
           decoration: _decoration(),
           //style: TextStyle(),

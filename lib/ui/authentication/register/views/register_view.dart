@@ -7,6 +7,7 @@ import 'package:unetpedia/widgets/loading_indicator.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/widgets/buttons/generic_button.dart';
 import 'package:unetpedia/ui/authentication/authentication.dart';
+import 'package:unetpedia/widgets/modals/modals.dart';
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
@@ -86,6 +87,48 @@ class __ContentState extends State<_Content> {
     super.dispose();
   }
 
+  void _imageSelectionModal() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      builder: (context) {
+        return UploadModal(
+          onGetImage: (image) => cubit.setImage(image),
+        );
+      },
+    );
+  }
+
+  void _degreeSelectionModal() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height * 0.4,
+          maxHeight: MediaQuery.of(context).size.height * 0.4),
+      builder: (context) {
+        return DegreeModal(
+          degree: (degree) {
+            cubit.setDegree(degree);
+            _degreeController = TextEditingController(text: degree);
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -100,6 +143,15 @@ class __ContentState extends State<_Content> {
               fontWeight: FontWeight.w700,
             ),
           ),
+          const SizedBox(height: 24),
+          BlocBuilder<AuthenticationCubit, AuthenticationState>(
+              buildWhen: (p, c) => (p.photoSelected != c.photoSelected),
+              builder: (context, state) {
+                return PhotoComponent(
+                  imageSelected: state.photoSelected,
+                  onPressed: () => _imageSelectionModal(),
+                );
+              }),
           const SizedBox(height: 24),
           FormInput(
             labelText: "Nombre",
@@ -145,33 +197,40 @@ class __ContentState extends State<_Content> {
             obscureText: true,
           ),
           const SizedBox(height: 24),
-          FormInput(
-            labelText: "Seleccionar Carrera",
-            hintText: "Selecciona",
-            textInputType: TextInputType.text,
-            validator: (value) => Validators.emptyValidation(value),
-            controller: _degreeController,
-            readOnly: true,
-            suffixIcon: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 24,
-              color: Color(0xFF9CA4AB),
-            ),
-            onPressed: () {
-              //print("Hola!");
-            },
-          ),
+          BlocBuilder<AuthenticationCubit, AuthenticationState>(
+              buildWhen: (p, c) => (p.degreeSelected != c.degreeSelected),
+              builder: (context, state) {
+                return FormInput(
+                  labelText: "Seleccionar Carrera",
+                  hintText: "Selecciona",
+                  textInputType: TextInputType.text,
+                  validator: (value) => Validators.emptyValidation(value),
+                  controller: _degreeController,
+                  readOnly: true,
+                  suffixIcon: const Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 24,
+                    color: Color(0xFF9CA4AB),
+                  ),
+                  onPressed: () => _degreeSelectionModal(),
+                );
+              }),
           const SizedBox(height: 48),
-          GenericButton(
-            text: "Registrar",
-            onTap: () {
-              FocusScope.of(context).unfocus();
+          BlocBuilder<AuthenticationCubit, AuthenticationState>(
+              buildWhen: (p, c) => (p.photoSelected != c.photoSelected),
+              builder: (context, state) {
+                return GenericButton(
+                  text: "Registrar",
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
 
-              if (_formKey.currentState!.validate()) {
-                cubit.register();
-              }
-            },
-          ),
+                    if (_formKey.currentState!.validate() &&
+                        state.photoSelected != null) {
+                      cubit.register();
+                    }
+                  },
+                );
+              }),
         ],
       ),
     );

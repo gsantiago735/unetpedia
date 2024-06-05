@@ -1,6 +1,7 @@
 export 'buttons/buttons.dart';
 export "dialogs/dialogs.dart";
 export "inputs/inputs.dart";
+export "modals/modals.dart";
 
 export 'appbar_layout.dart';
 export "generic_card.dart";

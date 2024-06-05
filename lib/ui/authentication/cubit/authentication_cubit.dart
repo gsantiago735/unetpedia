@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unetpedia/models/generic/generic_enums.dart';
+import 'package:unetpedia/models/generic/generic.dart';
 
 part 'authentication_state.dart';
 
@@ -15,6 +15,14 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
   void changeRemeberMe() {
     emit(state.copyWith(rememberMe: !state.rememberMe));
+  }
+
+  void setImage(PhotoModel photo) {
+    emit(state.copyWith(photoSelected: Wrapped.value(photo)));
+  }
+
+  void setDegree(String value) {
+    emit(state.copyWith(degreeSelected: Wrapped.value(value)));
   }
 
   // ========================================================================

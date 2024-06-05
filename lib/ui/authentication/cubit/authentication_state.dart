@@ -6,6 +6,8 @@ class AuthenticationState extends Equatable {
     this.showPassword = true,
     this.rememberMe = false,
     this.status = WidgetStatus.initial,
+    this.photoSelected,
+    this.degreeSelected,
   });
 
   // Generic
@@ -17,6 +19,8 @@ class AuthenticationState extends Equatable {
   final bool rememberMe;
 
   // Register
+  final PhotoModel? photoSelected;
+  final String? degreeSelected;
 
   // Forgot Password
 
@@ -26,6 +30,8 @@ class AuthenticationState extends Equatable {
         status,
         showPassword,
         rememberMe,
+        photoSelected,
+        degreeSelected,
       ];
 
   AuthenticationState copyWith({
@@ -33,13 +39,18 @@ class AuthenticationState extends Equatable {
     WidgetStatus? status,
     bool? showPassword,
     bool? rememberMe,
+    Wrapped<PhotoModel?>? photoSelected,
+    Wrapped<String?>? degreeSelected,
   }) {
     return AuthenticationState(
       errorText: errorText ?? this.errorText,
       status: status ?? this.status,
       showPassword: showPassword ?? this.showPassword,
       rememberMe: rememberMe ?? this.rememberMe,
-      //idUser: idUser != null ? idUser.value : this.idUser,
+      photoSelected:
+          photoSelected != null ? photoSelected.value : this.photoSelected,
+      degreeSelected:
+          degreeSelected != null ? degreeSelected.value : this.degreeSelected,
     );
   }
 }

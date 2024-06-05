@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/utils/validators.dart';
 import 'package:unetpedia/widgets/main_appbar.dart';
+import 'package:unetpedia/widgets/modals/modals.dart';
 import 'package:unetpedia/widgets/inputs/form_input.dart';
 import 'package:unetpedia/widgets/loading_indicator.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/widgets/buttons/generic_button.dart';
 import 'package:unetpedia/ui/authentication/authentication.dart';
-import 'package:unetpedia/widgets/modals/modals.dart';
+import 'package:unetpedia/widgets/dialogs/generic_status_dialog.dart';
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
@@ -24,7 +25,25 @@ class RegisterView extends StatelessWidget {
           backgroundColor: Colors.white,
           leadingIconColor: Colors.black,
         ),
-        body: BlocBuilder<AuthenticationCubit, AuthenticationState>(
+        body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
+            listenWhen: (p, c) => (p.status != c.status),
+            listener: (context, state) {
+              switch (state.status) {
+                case WidgetStatus.error:
+                  showDialog<void>(
+                    context: context,
+                    builder: (context) => GenericStatusDialog(
+                      description: state.errorText,
+                      isErrorDialog: true,
+                    ),
+                  );
+                  break;
+                case WidgetStatus.success:
+                  break;
+                default:
+                  break;
+              }
+            },
             buildWhen: (p, c) => (p.status != c.status),
             builder: (context, state) {
               return Stack(
@@ -224,8 +243,7 @@ class __ContentState extends State<_Content> {
                   onTap: () {
                     FocusScope.of(context).unfocus();
 
-                    if (_formKey.currentState!.validate() &&
-                        state.photoSelected != null) {
+                    if (_formKey.currentState!.validate()) {
                       cubit.register();
                     }
                   },

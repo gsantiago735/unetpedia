@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unetpedia/ui/home/home.dart';
 import 'package:unetpedia/utils/validators.dart';
 import 'package:unetpedia/widgets/widgets.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
@@ -259,7 +260,8 @@ class _ForgotPasswordText extends StatelessWidget {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                Navigator.pushNamed(context, ForgotPasswordView.routeName);
+                Navigator.pushNamed(context, HomeView.routeName);
+                //Navigator.pushNamed(context, ForgotPasswordView.routeName);
               },
           ),
         ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DegreeModal extends StatelessWidget {
   const DegreeModal({super.key, required this.degree});
@@ -7,17 +6,18 @@ class DegreeModal extends StatelessWidget {
   final void Function(String) degree;
 
   final List _degrees = const [
-    "Informatica",
-    "Electronica",
-    "Ambiental",
-    "Industrial",
-    "Psicologia",
-    "Mecanica",
-    "Produccion Animal",
-    "Musica",
-    "Deportivo",
-    "Civil",
-    "Arquitectura"
+    "Arquitectura.",
+    "Ingeniería Civil.",
+    "Ingeniería Electrónica.",
+    "Ingeniería Ambiental.",
+    "Ingeniería Informática.",
+    "Ingeniería Industrial.",
+    "Ingeniería Mecánica.",
+    "Ingeniería en Producción Animal.",
+    "Licenciatura en Música.",
+    "Psicología.",
+    "TSU en Electromedicína.",
+    "TSU en Entrenamiento Deportivo.",
   ];
 
   @override

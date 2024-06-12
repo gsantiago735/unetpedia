@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/utils/validators.dart';
+import 'package:unetpedia/utils/local_storage.dart';
 import 'package:unetpedia/widgets/main_appbar.dart';
 import 'package:unetpedia/widgets/modals/modals.dart';
+import 'package:unetpedia/ui/home/views/home_view.dart';
 import 'package:unetpedia/widgets/inputs/form_input.dart';
 import 'package:unetpedia/widgets/loading_indicator.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/widgets/buttons/generic_button.dart';
 import 'package:unetpedia/ui/authentication/authentication.dart';
+import 'package:unetpedia/models/authentication/authentication.dart';
 import 'package:unetpedia/widgets/dialogs/generic_status_dialog.dart';
 
 class RegisterView extends StatelessWidget {
@@ -27,7 +30,7 @@ class RegisterView extends StatelessWidget {
         ),
         body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
             listenWhen: (p, c) => (p.status != c.status),
-            listener: (context, state) {
+            listener: (context, state) async {
               switch (state.status) {
                 case WidgetStatus.error:
                   showDialog<void>(
@@ -39,6 +42,16 @@ class RegisterView extends StatelessWidget {
                   );
                   break;
                 case WidgetStatus.success:
+                  if (state.loginResponseModel?.idToken != null) {
+                    // Guardando data en cache
+                    await LocalStorage.setSession(
+                      token: state.loginResponseModel?.idToken,
+                      accessToken: state.loginResponseModel?.accessToken,
+                    );
+
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacementNamed(context, HomeView.routeName);
+                  }
                   break;
                 default:
                   break;
@@ -76,33 +89,36 @@ class __ContentState extends State<_Content> {
   late AuthenticationCubit cubit;
 
   late TextEditingController _nameController;
-  late TextEditingController _surnameController;
+  //late TextEditingController _surnameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   late TextEditingController _cPasswordController;
   late TextEditingController _degreeController;
+  late TextEditingController _descriptionController;
 
   @override
   void initState() {
     cubit = context.read<AuthenticationCubit>();
 
     _nameController = TextEditingController();
-    _surnameController = TextEditingController();
+    //_surnameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _cPasswordController = TextEditingController();
     _degreeController = TextEditingController();
+    _descriptionController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _surnameController.dispose();
+    //_surnameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _cPasswordController.dispose();
     _degreeController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -138,10 +154,10 @@ class __ContentState extends State<_Content> {
           minHeight: MediaQuery.of(context).size.height * 0.4,
           maxHeight: MediaQuery.of(context).size.height * 0.4),
       builder: (context) {
-        return DegreeModal(
-          degree: (degree) {
+        return SelectDegreeModal(
+          onDegreeSelected: (degree) {
             cubit.setDegree(degree);
-            _degreeController = TextEditingController(text: degree);
+            _degreeController = TextEditingController(text: degree.name);
           },
         );
       },
@@ -175,23 +191,25 @@ class __ContentState extends State<_Content> {
           FormInput(
             labelText: "Nombre",
             hintText: "Ingresar nombre",
-            textInputType: TextInputType.name,
+            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.words,
             validator: (value) => Validators.emptyValidation(value),
             controller: _nameController,
           ),
           const SizedBox(height: 24),
-          FormInput(
-            labelText: "Apellido",
-            hintText: "Ingresar apellido",
-            textInputType: TextInputType.name,
-            validator: (value) => Validators.emptyValidation(value),
-            controller: _surnameController,
-          ),
-          const SizedBox(height: 24),
+          //FormInput(
+          //  labelText: "Apellido",
+          //  hintText: "Ingresar apellido",
+          //  textInputType: TextInputType.name,
+          //  validator: (value) => Validators.emptyValidation(value),
+          //  controller: _surnameController,
+          //),
+          //const SizedBox(height: 24),
           FormInput(
             labelText: "Email",
             hintText: "Ingresar correo electrónico",
-            textInputType: TextInputType.emailAddress,
+            keyboardType: TextInputType.emailAddress,
+            textCapitalization: TextCapitalization.none,
             validator: (value) => Validators.emailValidation(value),
             controller: _emailController,
           ),
@@ -199,7 +217,7 @@ class __ContentState extends State<_Content> {
           FormInput(
             labelText: "Contraseña",
             hintText: "Ingresar contraseña",
-            textInputType: TextInputType.visiblePassword,
+            keyboardType: TextInputType.visiblePassword,
             validator: (value) => Validators.passwordValidation(
                 value, _passwordController.text, _cPasswordController.text),
             controller: _passwordController,
@@ -209,7 +227,7 @@ class __ContentState extends State<_Content> {
           FormInput(
             labelText: "Confirmar Contraseña",
             hintText: "Ingresar contraseña",
-            textInputType: TextInputType.visiblePassword,
+            keyboardType: TextInputType.visiblePassword,
             validator: (value) => Validators.passwordValidation(
                 value, _passwordController.text, _cPasswordController.text),
             controller: _cPasswordController,
@@ -222,7 +240,7 @@ class __ContentState extends State<_Content> {
                 return FormInput(
                   labelText: "Seleccionar Carrera",
                   hintText: "Selecciona",
-                  textInputType: TextInputType.text,
+                  keyboardType: TextInputType.text,
                   validator: (value) => Validators.emptyValidation(value),
                   controller: _degreeController,
                   readOnly: true,
@@ -234,17 +252,45 @@ class __ContentState extends State<_Content> {
                   onPressed: () => _degreeSelectionModal(),
                 );
               }),
+
+          const SizedBox(height: 24),
+          FormInput(
+            labelText: "Descripción",
+            hintText: "Ingresar descripción",
+            minLines: 4,
+            maxLines: 4,
+            maxLength: 200,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            textCapitalization: TextCapitalization.sentences,
+            validator: (value) => Validators.emptyValidation(value),
+            controller: _descriptionController,
+          ),
           const SizedBox(height: 48),
           BlocBuilder<AuthenticationCubit, AuthenticationState>(
-              buildWhen: (p, c) => (p.photoSelected != c.photoSelected),
+              buildWhen: (p, c) => (p.photoSelected != c.photoSelected ||
+                  p.degreeSelected != c.degreeSelected),
               builder: (context, state) {
                 return GenericButton(
                   text: "Registrar",
                   onTap: () {
                     FocusScope.of(context).unfocus();
 
-                    if (_formKey.currentState!.validate()) {
-                      cubit.register();
+                    // Validando el formulario
+                    if (_formKey.currentState!.validate() &&
+                        state.degreeSelected?.id != null) {
+                      // Creando entidad de registro
+                      final body = RegisterRequestModel(
+                        email: _emailController.text.trim(),
+                        password: _passwordController.text,
+                        name: _nameController.text.trim(),
+                        description: _descriptionController.text.trim(),
+                        career: state.degreeSelected!.id!,
+                        role: 1,
+                      );
+
+                      // Consumiendo el endpoint de registro
+                      cubit.register(body);
                     }
                   },
                 );

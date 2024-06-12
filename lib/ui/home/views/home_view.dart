@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unetpedia/ui/home/home.dart';
+import 'package:unetpedia/utils/navigator_utils.dart';
 import 'package:unetpedia/widgets/widgets.dart';
 import 'package:unetpedia/ui/departments/departments.dart';
 
@@ -50,6 +51,13 @@ class HomeView extends StatelessWidget {
             title: "Calcula Tu Nota",
             description: "Calcula lo que te falta para cada parcial.",
             onPressed: () {},
+          ),
+          const SizedBox(height: 20),
+          TextButton(
+            onPressed: () {
+              NavigatorUtils.resetSession(context);
+            },
+            child: const Text("Cerrar Sesión!"),
           ),
         ],
       ),

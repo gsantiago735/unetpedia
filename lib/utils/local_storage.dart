@@ -4,6 +4,9 @@ class LocalStorage {
   static late SharedPreferences prefs;
 
   static const String _tokenKey = "tokenKey";
+  static const String _accessToken = "accessToken";
+  static const String _emailKey = "emailKey";
+  static const String _passwordKey = "passwordKey";
 
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -11,33 +14,41 @@ class LocalStorage {
 
   //Writte
 
-  // static Future<void> setSession({
-  //   required String? userType,
-  //   required int? id,
-  //   required String? token,
-  // }) async {
-  //   if ((userType ?? "").isEmpty) {
-  //     throw Exception("User Type is null");
-  //   }
-  //   if ((token ?? "").isEmpty) {
-  //     throw Exception("token is null");
-  //   }
-  //   if (id == null) {
-  //     throw Exception("User id is null");
-  //   }
-  //
-  //   await prefs.setString(_tokenKey, token!);
-  //   await prefs.setInt(_userIdKey, id);
-  //   await prefs.setString(_userTypeKey, userType!);
-  // }
+  static Future<void> setSession(
+      {required String? token, required String? accessToken}) async {
+    if ((token ?? "").isEmpty) {
+      throw Exception("token is null");
+    }
+    if ((accessToken ?? "").isEmpty) {
+      throw Exception("accessToken is null");
+    }
+
+    await prefs.setString(_tokenKey, token!);
+    await prefs.setString(_accessToken, accessToken!);
+  }
+
+  static Future<void> setCredentials(
+      {required String? email, required String? password}) async {
+    if ((email ?? "").isEmpty) {
+      throw Exception("Email is null");
+    }
+    if ((password ?? "").isEmpty) {
+      throw Exception("Password is null");
+    }
+
+    await prefs.setString(_emailKey, email!);
+    await prefs.setString(_passwordKey, password!);
+  }
 
   // Get
 
-  static String? getToken() {
-    final token = prefs.getString(_tokenKey);
+  static String? getEmail() => prefs.getString(_emailKey);
 
-    return token;
-  }
+  static String? getPassword() => prefs.getString(_passwordKey);
+
+  static String? getToken() => prefs.getString(_tokenKey);
+
+  static String? getAccessToken() => prefs.getString(_accessToken);
 
   // static int? getUserId() {
   //   final id = prefs.getInt(_userIdKey);
@@ -56,9 +67,15 @@ class LocalStorage {
 
   // Delete
 
-  // static Future<void> deleteSession() async {
-  //   await prefs.remove(_tokenKey);
-  // }
+  static Future<void> deleteSession() async {
+    await prefs.remove(_tokenKey);
+    await prefs.remove(_accessToken);
+  }
+
+  static Future<void> deleteCredentials() async {
+    await prefs.remove(_emailKey);
+    await prefs.remove(_passwordKey);
+  }
 
   static Future<void> clear() async {
     await prefs.clear();

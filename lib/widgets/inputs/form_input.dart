@@ -10,8 +10,13 @@ class FormInput extends StatelessWidget {
     this.readOnly = false,
     this.prefixIcon,
     this.suffixIcon,
+    this.minLines,
+    this.maxLines = 1,
+    this.maxLength,
     this.controller,
-    required this.textInputType,
+    required this.keyboardType,
+    this.textCapitalization = TextCapitalization.sentences,
+    this.textInputAction,
     this.validator,
     this.onChange,
     this.onPressed,
@@ -24,8 +29,13 @@ class FormInput extends StatelessWidget {
   final IconData? prefixIcon;
   final Widget? suffixIcon;
 
+  final int? minLines;
+  final int maxLines;
+  final int? maxLength;
   final TextEditingController? controller;
-  final TextInputType textInputType;
+  final TextInputType keyboardType;
+  final TextCapitalization textCapitalization;
+  final TextInputAction? textInputAction;
 
   final void Function(String)? onChange;
   final String? Function(String?)? validator;
@@ -47,14 +57,18 @@ class FormInput extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          minLines: minLines,
+          maxLines: maxLines,
+          maxLength: maxLength,
           controller: controller,
           onChanged: onChange,
           obscureText: obscureText,
           validator: validator,
-          keyboardType: textInputType,
+          keyboardType: keyboardType,
           onTap: onPressed,
           readOnly: readOnly,
-          textCapitalization: TextCapitalization.sentences,
+          textCapitalization: textCapitalization,
+          textInputAction: textInputAction,
           decoration: _decoration(),
           //style: TextStyle(),
         ),

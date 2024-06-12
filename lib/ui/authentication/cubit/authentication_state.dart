@@ -8,19 +8,27 @@ class AuthenticationState extends Equatable {
     this.status = WidgetStatus.initial,
     this.photoSelected,
     this.degreeSelected,
+    this.loginResponseModel,
+    this.email,
+    this.password,
+    this.registerResponseModel,
   });
 
   // Generic
+  final String? email;
+  final String? password;
   final WidgetStatus status;
   final String errorText;
 
   // Login
   final bool showPassword;
   final bool rememberMe;
+  final LoginResponseModel? loginResponseModel;
 
   // Register
   final PhotoModel? photoSelected;
-  final String? degreeSelected;
+  final DegreeResponseModel? degreeSelected;
+  final RegisterResponseModel? registerResponseModel;
 
   // Forgot Password
 
@@ -32,6 +40,10 @@ class AuthenticationState extends Equatable {
         rememberMe,
         photoSelected,
         degreeSelected,
+        loginResponseModel,
+        email,
+        password,
+        registerResponseModel,
       ];
 
   AuthenticationState copyWith({
@@ -40,7 +52,11 @@ class AuthenticationState extends Equatable {
     bool? showPassword,
     bool? rememberMe,
     Wrapped<PhotoModel?>? photoSelected,
-    Wrapped<String?>? degreeSelected,
+    Wrapped<DegreeResponseModel?>? degreeSelected,
+    Wrapped<LoginResponseModel?>? loginResponseModel,
+    Wrapped<String?>? email,
+    Wrapped<String?>? password,
+    Wrapped<RegisterResponseModel?>? registerResponseModel,
   }) {
     return AuthenticationState(
       errorText: errorText ?? this.errorText,
@@ -51,6 +67,14 @@ class AuthenticationState extends Equatable {
           photoSelected != null ? photoSelected.value : this.photoSelected,
       degreeSelected:
           degreeSelected != null ? degreeSelected.value : this.degreeSelected,
+      loginResponseModel: loginResponseModel != null
+          ? loginResponseModel.value
+          : this.loginResponseModel,
+      email: email != null ? email.value : this.email,
+      password: password != null ? password.value : this.password,
+      registerResponseModel: registerResponseModel != null
+          ? registerResponseModel.value
+          : this.registerResponseModel,
     );
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/ui/home/home.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/utils/validators.dart';
 import 'package:unetpedia/widgets/widgets.dart';
+import 'package:unetpedia/utils/local_storage.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/core/constants/constant_colors.dart';
 import 'package:unetpedia/ui/authentication/authentication.dart';
@@ -21,7 +22,7 @@ class LoginView extends StatelessWidget {
         backgroundColor: ConstantColors.cff141718,
         body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
             listenWhen: (p, c) => (p.status != c.status),
-            listener: (context, state) {
+            listener: (context, state) async {
               switch (state.status) {
                 case WidgetStatus.error:
                   showDialog<void>(
@@ -33,51 +34,24 @@ class LoginView extends StatelessWidget {
                   );
                   break;
                 case WidgetStatus.success:
-                  /*final patientGeneric = context.read<PatientGeneralCubit>();
+                  if (state.loginResponseModel?.idToken != null) {
+                    // Guardando data en cache
+                    await LocalStorage.setSession(
+                      token: state.loginResponseModel?.idToken,
+                      accessToken: state.loginResponseModel?.accessToken,
+                    );
 
-              final adminGeneric = context.read<AdminGeneralCubit>();
+                    // Guardando credenciales de usuario si es necesario
+                    if (state.rememberMe) {
+                      await LocalStorage.setCredentials(
+                          email: state.email, password: state.password);
+                    } else {
+                      await LocalStorage.deleteCredentials();
+                    }
 
-              if (state.responseLogin?.user?.id != null) {
-                // Estableciendo en el cubit el id del usuario logueado
-                patientGeneric.setUserId(state.responseLogin?.user?.id);
-                adminGeneric.setAdminId(state.responseLogin?.user?.id);
-
-                // Guardando data en cache
-                await LocalStorage.setSession(
-                    userType: state.responseLogin?.user?.tiprol,
-                    id: state.responseLogin?.user?.id,
-                    token: state.responseLogin?.token?.accessToken);
-
-                // Guardando credenciales de usuario si es necesario
-                if (state.rememberMe) {
-                  await LocalStorage.setCredentials(
-                    email: state.emailInput,
-                    password: state.passwordInput,
-                  );
-                } else {
-                  await LocalStorage.deleteCredentials();
-                }
-
-                // Validando el tipo de usuario
-                switch (LocalStorage.getUserType()) {
-                  case "Patient":
-                    Navigator.pushReplacementNamed(
-                        context, PatientHomeView.routeName);
-                    break;
-                  case "Admin":
-                    Navigator.pushReplacementNamed(
-                        context, AdminHomeView.routeName);
-                    break;
-                  case "Doctor":
-                    Navigator.pushReplacementNamed(
-                        context, DoctorHomeView.routeName);
-                    break;
-                  default:
-                    Navigator.pushReplacementNamed(
-                        context, ErrorHomeView.routeName);
-                    break;
-                }
-              }*/
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacementNamed(context, HomeView.routeName);
+                  }
                   break;
                 default:
                   break;
@@ -150,8 +124,9 @@ class __ContentState extends State<_Content> {
   @override
   void initState() {
     cubit = context.read<AuthenticationCubit>();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
+    _emailController = TextEditingController(text: LocalStorage.getEmail());
+    _passwordController =
+        TextEditingController(text: LocalStorage.getPassword());
     super.initState();
   }
 
@@ -176,7 +151,8 @@ class __ContentState extends State<_Content> {
               FormInput(
                 labelText: "Email",
                 hintText: "Ingresar correo electrónico",
-                textInputType: TextInputType.emailAddress,
+                keyboardType: TextInputType.emailAddress,
+                textCapitalization: TextCapitalization.none,
                 validator: (value) => Validators.emailValidation(value),
                 controller: _emailController,
               ),
@@ -188,7 +164,7 @@ class __ContentState extends State<_Content> {
                       labelText: "Contraseña",
                       hintText: "Ingresar contraseña",
                       controller: _passwordController,
-                      textInputType: TextInputType.visiblePassword,
+                      keyboardType: TextInputType.visiblePassword,
                       obscureText: state.showPassword,
                       validator: (value) =>
                           Validators.loginPasswordValidation(value),
@@ -206,7 +182,7 @@ class __ContentState extends State<_Content> {
                   }),
               const _RememberMe(),
               const SizedBox(height: 12),
-              const _ForgotPasswordText(),
+              //const _ForgotPasswordText(),
             ],
           ),
           Column(
@@ -218,7 +194,10 @@ class __ContentState extends State<_Content> {
                   FocusScope.of(context).unfocus();
 
                   if (_formKey.currentState!.validate()) {
-                    cubit.login();
+                    cubit.login(
+                      email: _emailController.text.trim(),
+                      password: _passwordController.text,
+                    );
                   }
                 },
               ),
@@ -232,43 +211,42 @@ class __ContentState extends State<_Content> {
   }
 }
 
-class _ForgotPasswordText extends StatelessWidget {
-  const _ForgotPasswordText();
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        children: [
-          const TextSpan(
-            text: '¿Olvidaste tu contraseña?',
-            style: TextStyle(
-              color: Color(0xFF6C6C6C),
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const TextSpan(text: ' '),
-          TextSpan(
-            text: 'Recuperar',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: ConstantColors.cff141718,
-              //fontWeight: FontWeight.bold,
-            ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                Navigator.pushNamed(context, HomeView.routeName);
-                //Navigator.pushNamed(context, ForgotPasswordView.routeName);
-              },
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class _ForgotPasswordText extends StatelessWidget {
+//   const _ForgotPasswordText();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return RichText(
+//       textAlign: TextAlign.center,
+//       text: TextSpan(
+//         children: [
+//           const TextSpan(
+//             text: '¿Olvidaste tu contraseña?',
+//             style: TextStyle(
+//               color: Color(0xFF6C6C6C),
+//               fontSize: 16,
+//               fontWeight: FontWeight.w400,
+//             ),
+//           ),
+//           const TextSpan(text: ' '),
+//           TextSpan(
+//             text: 'Recuperar',
+//             style: const TextStyle(
+//               fontSize: 16,
+//               fontWeight: FontWeight.w700,
+//               color: ConstantColors.cff141718,
+//               //fontWeight: FontWeight.bold,
+//             ),
+//             recognizer: TapGestureRecognizer()
+//               ..onTap = () {
+//                 Navigator.pushNamed(context, ForgotPasswordView.routeName);
+//               },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class _RegisterText extends StatelessWidget {
   const _RegisterText();

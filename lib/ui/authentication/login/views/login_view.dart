@@ -16,7 +16,8 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthenticationCubit(),
+      create: (context) => AuthenticationCubit()
+        ..setRememberMe((LocalStorage.getEmail() ?? "").isEmpty ? false : true),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: ConstantColors.cff141718,
@@ -34,9 +35,11 @@ class LoginView extends StatelessWidget {
                   );
                   break;
                 case WidgetStatus.success:
+                  // TODO pedir el id en el response del login
                   if (state.loginResponseModel?.idToken != null) {
                     // Guardando data en cache
-                    await LocalStorage.setSession(
+                    /*await LocalStorage.setSession(
+                      userId: ,
                       token: state.loginResponseModel?.idToken,
                       accessToken: state.loginResponseModel?.accessToken,
                     );
@@ -50,7 +53,7 @@ class LoginView extends StatelessWidget {
                     }
 
                     // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, HomeView.routeName);
+                    Navigator.pushReplacementNamed(context, HomeView.routeName);*/
                   }
                   break;
                 default:

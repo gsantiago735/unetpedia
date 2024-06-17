@@ -15,6 +15,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     emit(state.copyWith(showPassword: !state.showPassword));
   }
 
+  void setRememberMe(bool value) {
+    emit(state.copyWith(rememberMe: value));
+  }
+
   void changeRemeberMe() {
     emit(state.copyWith(rememberMe: !state.rememberMe));
   }

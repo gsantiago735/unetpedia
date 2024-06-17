@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unetpedia/models/authentication/register_response_model.dart';
 import 'package:unetpedia/providers/providers.dart';
 import 'package:unetpedia/models/generic/generic.dart';
 import 'package:unetpedia/models/subject/categories_response_model.dart';
@@ -36,8 +37,26 @@ class GeneralCubit extends Cubit<GeneralState> {
   }
 
   // =======================================================================
-  // Log Out
+  // Authentication
   // =======================================================================
+
+  Future<void> getUser() async {
+    if (state.getUserStatus == WidgetStatus.loading) return;
+    emit(state.copyWith(getUserStatus: WidgetStatus.loading));
+
+    final response = await _genericProvider.getUser();
+
+    return response.fold((l) {
+      emit(state.copyWith(
+          getUserStatus: WidgetStatus.error, errorText: l.details));
+    }, (r) async {
+      emit(
+        state.copyWith(
+            getUserStatus: WidgetStatus.success,
+            userResponseModel: Wrapped.value(r)),
+      );
+    });
+  }
 
   Future<void> logOut() async {
     if (state.logOutStatus == WidgetStatus.loading) return;

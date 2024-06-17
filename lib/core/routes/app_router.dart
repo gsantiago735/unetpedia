@@ -13,6 +13,7 @@ class AppRouter {
 
     // Home
     HomeView.routeName: (BuildContext contex) => const HomeView(),
+    SettingsView.routeName: (context) => const SettingsView(),
 
     // Departments
     DepartmentsView.routeName: (BuildContext contex) => const DepartmentsView(),

@@ -3,3 +3,4 @@ export "degrees_response_model.dart";
 export "wrapped.dart";
 export "generic_enums.dart";
 export "photo_model.dart";
+export "user_response_model.dart";

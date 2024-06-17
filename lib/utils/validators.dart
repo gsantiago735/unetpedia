@@ -11,12 +11,25 @@ class Validators {
   }
 
   static String? loginPasswordValidation(String? value) {
+    final regex =
+        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     if (value == null || value.isEmpty) {
       return 'Los campos están vacíos.';
-    } else if (value.length < 6) {
-      return "La contraseña debe contener al menos 6 caracteres.";
+    } else if ((!regex.hasMatch(value))) {
+      if (!value.contains(RegExp(r'[A-Z]'))) {
+        return 'La contraseña debe contener al menos una letra mayúscula.';
+      } else if (!value.contains(RegExp(r'[a-z]'))) {
+        return 'La contraseña debe contener al menos una letra minúscula.';
+      } else if (!value.contains(RegExp(r'[0-9]'))) {
+        return 'La contraseña debe contener al menos un número.';
+      } else if (!value.contains(RegExp(r'[!@#\$&*~]'))) {
+        return 'La contraseña debe contener al menos un caracter especial.';
+      } else {
+        return 'La contraseña debe contener al menos 8 caracteres.';
+      }
+    } else {
+      return null;
     }
-    return null;
   }
 
   static String? emptyValidation(String? value, {int maxCharacters = 1000}) {
@@ -30,12 +43,11 @@ class Validators {
     return null;
   }
 
-  static String? passwordValidation(
+  static String? registerPasswordValidation(
       String? value, String password, String cPassword) {
-    if (value == null || value.isEmpty) {
-      return 'Los campos están vacíos.';
-    } else if (value.length < 6) {
-      return "La contraseña debe contener al menos 6 caracteres.";
+    final text = loginPasswordValidation(value);
+    if (text != null) {
+      return text;
     } else if (password != cPassword) {
       return "Las contraseñas deben coincidir.";
     }

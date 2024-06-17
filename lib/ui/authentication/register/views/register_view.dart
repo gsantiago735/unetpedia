@@ -45,12 +45,14 @@ class RegisterView extends StatelessWidget {
                   if (state.loginResponseModel?.idToken != null) {
                     // Guardando data en cache
                     await LocalStorage.setSession(
+                      userId: state.registerResponseModel?.user?.id.toString(),
                       token: state.loginResponseModel?.idToken,
                       accessToken: state.loginResponseModel?.accessToken,
                     );
 
                     // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, HomeView.routeName);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        HomeView.routeName, (Route route) => false);
                   }
                   break;
                 default:
@@ -218,7 +220,7 @@ class __ContentState extends State<_Content> {
             labelText: "Contraseña",
             hintText: "Ingresar contraseña",
             keyboardType: TextInputType.visiblePassword,
-            validator: (value) => Validators.passwordValidation(
+            validator: (value) => Validators.registerPasswordValidation(
                 value, _passwordController.text, _cPasswordController.text),
             controller: _passwordController,
             obscureText: true,
@@ -228,7 +230,7 @@ class __ContentState extends State<_Content> {
             labelText: "Confirmar Contraseña",
             hintText: "Ingresar contraseña",
             keyboardType: TextInputType.visiblePassword,
-            validator: (value) => Validators.passwordValidation(
+            validator: (value) => Validators.registerPasswordValidation(
                 value, _passwordController.text, _cPasswordController.text),
             controller: _cPasswordController,
             obscureText: true,
@@ -286,7 +288,7 @@ class __ContentState extends State<_Content> {
                         name: _nameController.text.trim(),
                         description: _descriptionController.text.trim(),
                         career: state.degreeSelected!.id!,
-                        role: 1,
+                        role: 2, // 1 Tutor, 2 Estudiante
                       );
 
                       // Consumiendo el endpoint de registro

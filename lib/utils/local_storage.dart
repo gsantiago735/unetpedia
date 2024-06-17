@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
   static late SharedPreferences prefs;
 
+  static const String _userIdKey = "userId";
   static const String _tokenKey = "tokenKey";
   static const String _accessToken = "accessToken";
   static const String _emailKey = "emailKey";
@@ -15,7 +18,12 @@ class LocalStorage {
   //Writte
 
   static Future<void> setSession(
-      {required String? token, required String? accessToken}) async {
+      {required String? userId,
+      required String? token,
+      required String? accessToken}) async {
+    if ((userId ?? "").isEmpty) {
+      throw Exception("userId is null");
+    }
     if ((token ?? "").isEmpty) {
       throw Exception("token is null");
     }
@@ -23,6 +31,7 @@ class LocalStorage {
       throw Exception("accessToken is null");
     }
 
+    await prefs.setString(_userIdKey, userId!);
     await prefs.setString(_tokenKey, token!);
     await prefs.setString(_accessToken, accessToken!);
   }
@@ -50,20 +59,20 @@ class LocalStorage {
 
   static String? getAccessToken() => prefs.getString(_accessToken);
 
-  // static int? getUserId() {
-  //   final id = prefs.getInt(_userIdKey);
-  //
-  //   try {
-  //     if (id == null) {
-  //       throw Exception("-------EL ID DEL USUARIO ES NULO-------");
-  //     }
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-  //
-  //   log(id.toString());
-  //   return id;
-  // }
+  static String? getUserId() {
+    final id = prefs.getString(_userIdKey);
+
+    try {
+      if (id == null) {
+        throw Exception("-------EL ID DEL USUARIO ES NULO-------");
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+
+    log(id.toString());
+    return id;
+  }
 
   // Delete
 

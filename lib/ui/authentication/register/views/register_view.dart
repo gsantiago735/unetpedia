@@ -24,9 +24,7 @@ class RegisterView extends StatelessWidget {
       child: Scaffold(
         appBar: const MainAppBar(
           title: "Registro",
-          titleColor: Colors.black,
-          backgroundColor: Colors.white,
-          leadingIconColor: Colors.black,
+          isWhite: true,
         ),
         body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
             listenWhen: (p, c) => (p.status != c.status),
@@ -42,11 +40,10 @@ class RegisterView extends StatelessWidget {
                   );
                   break;
                 case WidgetStatus.success:
-                  if (state.loginResponseModel?.idToken != null) {
+                  if (state.loginResponseModel?.accessToken != null) {
                     // Guardando data en cache
                     await LocalStorage.setSession(
                       userId: state.registerResponseModel?.user?.id.toString(),
-                      token: state.loginResponseModel?.idToken,
                       accessToken: state.loginResponseModel?.accessToken,
                     );
 
@@ -91,7 +88,7 @@ class __ContentState extends State<_Content> {
   late AuthenticationCubit cubit;
 
   late TextEditingController _nameController;
-  //late TextEditingController _surnameController;
+  late TextEditingController _lastNameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   late TextEditingController _cPasswordController;
@@ -103,7 +100,7 @@ class __ContentState extends State<_Content> {
     cubit = context.read<AuthenticationCubit>();
 
     _nameController = TextEditingController();
-    //_surnameController = TextEditingController();
+    _lastNameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _cPasswordController = TextEditingController();
@@ -115,7 +112,7 @@ class __ContentState extends State<_Content> {
   @override
   void dispose() {
     _nameController.dispose();
-    //_surnameController.dispose();
+    _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _cPasswordController.dispose();
@@ -199,14 +196,14 @@ class __ContentState extends State<_Content> {
             controller: _nameController,
           ),
           const SizedBox(height: 24),
-          //FormInput(
-          //  labelText: "Apellido",
-          //  hintText: "Ingresar apellido",
-          //  textInputType: TextInputType.name,
-          //  validator: (value) => Validators.emptyValidation(value),
-          //  controller: _surnameController,
-          //),
-          //const SizedBox(height: 24),
+          FormInput(
+            labelText: "Apellido",
+            hintText: "Ingresar apellido",
+            keyboardType: TextInputType.name,
+            validator: (value) => Validators.emptyValidation(value),
+            controller: _lastNameController,
+          ),
+          const SizedBox(height: 24),
           FormInput(
             labelText: "Email",
             hintText: "Ingresar correo electrónico",
@@ -254,7 +251,6 @@ class __ContentState extends State<_Content> {
                   onPressed: () => _degreeSelectionModal(),
                 );
               }),
-
           const SizedBox(height: 24),
           FormInput(
             labelText: "Descripción",
@@ -286,6 +282,7 @@ class __ContentState extends State<_Content> {
                         email: _emailController.text.trim(),
                         password: _passwordController.text,
                         name: _nameController.text.trim(),
+                        lastName: _lastNameController.text.trim(),
                         description: _descriptionController.text.trim(),
                         career: state.degreeSelected!.id!,
                         role: 2, // 1 Tutor, 2 Estudiante

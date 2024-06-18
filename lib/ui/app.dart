@@ -15,7 +15,7 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
-    final isLogged = (LocalStorage.getToken() ?? "").isNotEmpty;
+    final isLogged = (LocalStorage.getAccessToken() ?? "").isNotEmpty;
 
     // Caso cuando el usario esta logueado
     if (isLogged) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/ui/cubit/cubit.dart';
+import 'package:unetpedia/ui/home/views/views.dart';
 import 'package:unetpedia/widgets/main_appbar.dart';
 import 'package:unetpedia/utils/navigator_utils.dart';
 import 'package:unetpedia/core/constants/constant_colors.dart';
@@ -15,9 +15,7 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
       appBar: const MainAppBar(
         title: "Ajustes",
-        titleColor: Colors.black,
-        backgroundColor: Colors.white,
-        leadingIconColor: Colors.black,
+        isWhite: true,
       ),
       body: Column(
         children: [
@@ -40,7 +38,9 @@ class SettingsView extends StatelessWidget {
           _ListTile(
             title: "Cambiar Contraseña",
             icon: Icons.key_rounded,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, UpdatePasswordView.routeName);
+            },
           ),
           const SizedBox(height: 15),
           _ListTile(
@@ -93,7 +93,7 @@ class _UserInfoComponent extends StatelessWidget {
                               fontSize: 15, fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          state.userResponseModel?.user?.name ?? "...",
+                          state.userResponseModel?.user?.fullName ?? "...",
                           style: const TextStyle(
                             fontSize: 18,
                             color: ConstantColors.cff141718,

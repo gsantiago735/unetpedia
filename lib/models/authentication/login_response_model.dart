@@ -1,12 +1,12 @@
 class LoginResponseModel {
   final String? message;
-  final String? idToken;
+  final int? userId;
   final String? refreshToken;
   final String? accessToken;
 
   LoginResponseModel({
     this.message,
-    this.idToken,
+    this.userId,
     this.refreshToken,
     this.accessToken,
   });
@@ -14,14 +14,14 @@ class LoginResponseModel {
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
       LoginResponseModel(
         message: json["message"],
-        idToken: json["IdToken"],
+        userId: json["user_id"],
         refreshToken: json["RefreshToken"],
         accessToken: json["AccessToken"],
       );
 
   Map<String, dynamic> toJson() => {
         "message": message,
-        "IdToken": idToken,
+        "user_id": userId,
         "RefreshToken": refreshToken,
         "AccessToken": accessToken,
       };

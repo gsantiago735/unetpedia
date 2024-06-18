@@ -3,6 +3,7 @@ import 'package:unetpedia/models/generic/degrees_response_model.dart';
 class UserResponseModel {
   final int? id;
   final String? name;
+  final String? lastName;
   final String? email;
   final int? roleId;
   final String? description;
@@ -13,6 +14,7 @@ class UserResponseModel {
   UserResponseModel({
     this.id,
     this.name,
+    this.lastName,
     this.email,
     this.roleId,
     this.description,
@@ -25,6 +27,7 @@ class UserResponseModel {
       UserResponseModel(
         id: json["id"],
         name: json["name"],
+        lastName: json["lastName"],
         email: json["email"],
         roleId: json["role_id"],
         description: json["description"],
@@ -40,6 +43,7 @@ class UserResponseModel {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "lastName": lastName,
         "email": email,
         "role_id": roleId,
         "description": description,
@@ -47,4 +51,12 @@ class UserResponseModel {
         "career": career?.toJson(),
         "role": role?.toJson(),
       };
+
+  String? get fullName {
+    if (name != null && lastName != null) {
+      return "$name $lastName";
+    } else {
+      return null;
+    }
+  }
 }

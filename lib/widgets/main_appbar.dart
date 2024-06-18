@@ -8,20 +8,16 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.centerTitle = true,
     this.isBoldTitle = false,
     this.needsGoback = true,
-    this.titleColor = Colors.white,
-    this.leadingIconColor = Colors.white,
-    this.backgroundColor = ConstantColors.cff141718,
+    this.isWhite = false,
     this.onBack,
     this.actions,
   }) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   final bool centerTitle;
   final String title;
-  final Color titleColor;
   final bool isBoldTitle;
   final bool needsGoback;
-  final Color leadingIconColor;
-  final Color backgroundColor;
+  final bool isWhite;
   final VoidCallback? onBack;
   final List<Widget>? actions;
 
@@ -37,14 +33,16 @@ class _MainAppBarState extends State<MainAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: widget.centerTitle,
-      backgroundColor: widget.backgroundColor,
-      surfaceTintColor: widget.backgroundColor,
+      backgroundColor:
+          (widget.isWhite) ? Colors.white : ConstantColors.cff141718,
+      surfaceTintColor:
+          (widget.isWhite) ? Colors.white : ConstantColors.cff141718,
       actions: widget.actions,
       leading: (widget.needsGoback)
           ? IconButton(
               icon: Icon(
                 Icons.arrow_back_ios_new_rounded,
-                color: widget.leadingIconColor,
+                color: (widget.isWhite) ? Colors.black : Colors.white,
               ),
               style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(Colors.transparent),
@@ -58,7 +56,7 @@ class _MainAppBarState extends State<MainAppBar> {
         widget.title,
         style: TextStyle(
           fontSize: widget.isBoldTitle ? 28 : 22,
-          color: widget.titleColor,
+          color: (widget.isWhite) ? Colors.black : Colors.white,
           fontWeight: widget.isBoldTitle ? FontWeight.w800 : FontWeight.w600,
         ),
       ),

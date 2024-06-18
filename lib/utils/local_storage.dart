@@ -6,7 +6,6 @@ class LocalStorage {
   static late SharedPreferences prefs;
 
   static const String _userIdKey = "userId";
-  static const String _tokenKey = "tokenKey";
   static const String _accessToken = "accessToken";
   static const String _emailKey = "emailKey";
   static const String _passwordKey = "passwordKey";
@@ -18,21 +17,15 @@ class LocalStorage {
   //Writte
 
   static Future<void> setSession(
-      {required String? userId,
-      required String? token,
-      required String? accessToken}) async {
+      {required String? userId, required String? accessToken}) async {
     if ((userId ?? "").isEmpty) {
       throw Exception("userId is null");
-    }
-    if ((token ?? "").isEmpty) {
-      throw Exception("token is null");
     }
     if ((accessToken ?? "").isEmpty) {
       throw Exception("accessToken is null");
     }
 
     await prefs.setString(_userIdKey, userId!);
-    await prefs.setString(_tokenKey, token!);
     await prefs.setString(_accessToken, accessToken!);
   }
 
@@ -55,8 +48,6 @@ class LocalStorage {
 
   static String? getPassword() => prefs.getString(_passwordKey);
 
-  static String? getToken() => prefs.getString(_tokenKey);
-
   static String? getAccessToken() => prefs.getString(_accessToken);
 
   static String? getUserId() {
@@ -77,7 +68,7 @@ class LocalStorage {
   // Delete
 
   static Future<void> deleteSession() async {
-    await prefs.remove(_tokenKey);
+    await prefs.remove(_userIdKey);
     await prefs.remove(_accessToken);
   }
 

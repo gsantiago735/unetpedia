@@ -6,7 +6,6 @@ import 'package:unetpedia/core/constants/constant_api.dart';
 class Api {
   final dio = createDio();
   final dioFormData = createDioFormData();
-  final dioLogOut = logOutDio();
 
   static Dio createDio() {
     var dio = Dio(BaseOptions(
@@ -16,17 +15,6 @@ class Api {
       sendTimeout: const Duration(minutes: 3),
     ));
     dio.interceptors.addAll({AppInterceptors(dio)});
-    return dio;
-  }
-
-  static Dio logOutDio() {
-    var dio = Dio(BaseOptions(
-      baseUrl: ConstantApi.url,
-      receiveTimeout: const Duration(minutes: 3),
-      connectTimeout: const Duration(minutes: 3),
-      sendTimeout: const Duration(minutes: 3),
-    ));
-    dio.interceptors.addAll({AppInterceptorsLogOut(dio)});
     return dio;
   }
 
@@ -49,7 +37,7 @@ class AppInterceptors extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    var accessToken = LocalStorage.getToken();
+    var accessToken = LocalStorage.getAccessToken();
 
     log("Token de acceso -> $accessToken");
 
@@ -65,23 +53,5 @@ class AppInterceptors extends Interceptor {
     log(err.message.toString());
     log(err.response.toString());
     handler.next(err);
-  }
-}
-
-class AppInterceptorsLogOut extends Interceptor {
-  final Dio dio;
-
-  AppInterceptorsLogOut(this.dio);
-
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    var accessToken = LocalStorage.getAccessToken();
-
-    log("Token de acceso -> $accessToken");
-
-    if (accessToken != null) {
-      options.headers['Authorization'] = 'Bearer $accessToken';
-    }
-    return handler.next(options);
   }
 }

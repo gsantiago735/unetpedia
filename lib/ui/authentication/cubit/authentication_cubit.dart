@@ -75,4 +75,24 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       login(email: data.email, password: data.password);
     });
   }
+
+  // ========================================================================
+  // Change Password
+  // ========================================================================
+
+  Future<void> changePassword(
+      {required String currentPassword, required String newPassword}) async {
+    if (state.status == WidgetStatus.loading) return;
+    emit(state.copyWith(status: WidgetStatus.loading));
+
+    final response = await _authenticationProvider.changePassword(
+        currentPassword: currentPassword, newPassword: newPassword);
+
+    return response.fold((l) {
+      emit(state.copyWith(status: WidgetStatus.error, errorText: l.details));
+    }, (r) async {
+      emit(state.copyWith(
+          status: WidgetStatus.success, password: Wrapped.value(newPassword)));
+    });
+  }
 }

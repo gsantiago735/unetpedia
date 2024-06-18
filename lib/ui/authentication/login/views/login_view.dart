@@ -35,12 +35,10 @@ class LoginView extends StatelessWidget {
                   );
                   break;
                 case WidgetStatus.success:
-                  // TODO pedir el id en el response del login
-                  if (state.loginResponseModel?.idToken != null) {
+                  if (state.loginResponseModel?.accessToken != null) {
                     // Guardando data en cache
-                    /*await LocalStorage.setSession(
-                      userId: ,
-                      token: state.loginResponseModel?.idToken,
+                    await LocalStorage.setSession(
+                      userId: state.loginResponseModel?.userId.toString(),
                       accessToken: state.loginResponseModel?.accessToken,
                     );
 
@@ -53,7 +51,7 @@ class LoginView extends StatelessWidget {
                     }
 
                     // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, HomeView.routeName);*/
+                    Navigator.pushReplacementNamed(context, HomeView.routeName);
                   }
                   break;
                 default:

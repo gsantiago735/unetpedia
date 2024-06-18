@@ -1,5 +1,6 @@
 class RegisterRequestModel {
   final String name;
+  final String lastName;
   final String email;
   final String password;
   final int role;
@@ -8,6 +9,7 @@ class RegisterRequestModel {
 
   RegisterRequestModel({
     required this.name,
+    required this.lastName,
     required this.email,
     required this.password,
     required this.role,
@@ -17,6 +19,7 @@ class RegisterRequestModel {
 
   RegisterRequestModel copyWith({
     String? name,
+    String? lastName,
     String? email,
     String? password,
     int? role,
@@ -25,6 +28,7 @@ class RegisterRequestModel {
   }) =>
       RegisterRequestModel(
         name: name ?? this.name,
+        lastName: lastName ?? this.lastName,
         email: email ?? this.email,
         password: password ?? this.password,
         role: role ?? this.role,
@@ -43,6 +47,7 @@ class RegisterRequestModel {
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "lastname": lastName,
         "email": email,
         "password": password,
         "role": role,

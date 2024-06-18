@@ -42,9 +42,29 @@ class AuthenticationProvider {
   // Log Out
   Future<Either<DataException, LoginResponseModel>> logOut() async {
     try {
-      final response = await Api().dioLogOut.post(EndPointConstant.logOut);
+      final response = await Api().dioFormData.post(EndPointConstant.logOut);
 
       return Right(LoginResponseModel.fromJson(response.data));
+    } on DioException catch (e) {
+      return Left(DataException(details: e.response?.data.toString()));
+    } catch (e) {
+      return Left(DataException(details: e.toString()));
+    }
+  }
+
+  // Change Password
+  Future<Either<DataException, String>> changePassword(
+      {required String currentPassword, required String newPassword}) async {
+    final data = {
+      "currentPassword": currentPassword,
+      "newPassword": newPassword
+    };
+    try {
+      final response = await Api()
+          .dioFormData
+          .put(EndPointConstant.changePassword, data: data);
+
+      return Right(response.data.toString());
     } on DioException catch (e) {
       return Left(DataException(details: e.response?.data.toString()));
     } catch (e) {

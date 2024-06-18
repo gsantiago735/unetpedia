@@ -29,7 +29,7 @@ class UserResponseModel {
       UserResponseModel(
         id: json["id"],
         name: json["name"],
-        lastName: json["lastName"],
+        lastName: json["lastname"],
         email: json["email"],
         photo: json["photo"],
         roleId: json["role_id"],

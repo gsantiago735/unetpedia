@@ -72,8 +72,8 @@ class _UserInfoComponent extends StatelessWidget {
               return Row(
                 children: [
                   Container(
-                    height: 60,
-                    width: 60,
+                    height: 80,
+                    width: 80,
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(18),
@@ -84,6 +84,7 @@ class _UserInfoComponent extends StatelessWidget {
                     ),
                     child: GenericNetworkImage(
                       url: state.userResponseModel?.user?.photo,
+                      borderRadius: 18,
                     ),
                   ),
                   const SizedBox(width: 10),

@@ -12,6 +12,7 @@ class AuthenticationState extends Equatable {
     this.email,
     this.password,
     this.registerResponseModel,
+    this.presignedStatus = WidgetStatus.initial,
   });
 
   // Generic
@@ -28,6 +29,7 @@ class AuthenticationState extends Equatable {
   // Register
   final PhotoModel? photoSelected;
   final DegreeResponseModel? degreeSelected;
+  final WidgetStatus presignedStatus;
   final RegisterResponseModel? registerResponseModel;
 
   // Forgot Password
@@ -44,6 +46,7 @@ class AuthenticationState extends Equatable {
         email,
         password,
         registerResponseModel,
+        presignedStatus,
       ];
 
   AuthenticationState copyWith({
@@ -57,6 +60,7 @@ class AuthenticationState extends Equatable {
     Wrapped<String?>? email,
     Wrapped<String?>? password,
     Wrapped<RegisterResponseModel?>? registerResponseModel,
+    WidgetStatus? presignedStatus,
   }) {
     return AuthenticationState(
       errorText: errorText ?? this.errorText,
@@ -75,6 +79,7 @@ class AuthenticationState extends Equatable {
       registerResponseModel: registerResponseModel != null
           ? registerResponseModel.value
           : this.registerResponseModel,
+      presignedStatus: presignedStatus ?? this.presignedStatus,
     );
   }
 }

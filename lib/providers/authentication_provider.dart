@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:dartz/dartz.dart';
 import 'package:unetpedia/api/api.dart';
+import 'package:unetpedia/models/generic/generic.dart';
 import 'package:unetpedia/core/constants/end_point_constant.dart';
 import 'package:unetpedia/models/authentication/authentication.dart';
-import 'package:unetpedia/models/generic/data_exception_model.dart';
 
 class AuthenticationProvider {
   // Log In
@@ -63,6 +63,27 @@ class AuthenticationProvider {
       final response = await Api()
           .dioFormData
           .put(EndPointConstant.changePassword, data: data);
+
+      return Right(response.data.toString());
+    } on DioException catch (e) {
+      return Left(DataException(details: e.response?.data.toString()));
+    } catch (e) {
+      return Left(DataException(details: e.toString()));
+    }
+  }
+
+  // Upload Profile Photo (After Register)
+  Future<Either<DataException, String>> uploadPhoto(
+      {required String presignedUrl, required PhotoModel photo}) async {
+    try {
+      final response = await Api().dioFormData.put(
+            presignedUrl,
+            options: Options(headers: {
+              "Content-Type": "image/png",
+              "Connection": "keep-alive"
+            }),
+            data: photo.file.readAsBytesSync(),
+          );
 
       return Right(response.data.toString());
     } on DioException catch (e) {

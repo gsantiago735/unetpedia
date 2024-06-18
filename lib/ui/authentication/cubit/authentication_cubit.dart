@@ -67,12 +67,31 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     return response.fold((l) {
       emit(state.copyWith(status: WidgetStatus.error, errorText: l.details));
     }, (r) async {
+      emit(state.copyWith(registerResponseModel: Wrapped.value(r)));
+
+      await _uploadPhoto();
+      login(email: data.email, password: data.password);
+    });
+  }
+
+  Future<void> _uploadPhoto() async {
+    if (state.presignedStatus == WidgetStatus.loading) return;
+    emit(state.copyWith(presignedStatus: WidgetStatus.loading));
+
+    final response = await _authenticationProvider.uploadPhoto(
+      presignedUrl: state.registerResponseModel!.presignedURL!,
+      photo: state.photoSelected!,
+    );
+
+    return response.fold((l) {
       emit(state.copyWith(
-        registerResponseModel: Wrapped.value(r),
+        presignedStatus: WidgetStatus.error,
+        errorText: l.details,
         status: WidgetStatus.initial,
       ));
-
-      login(email: data.email, password: data.password);
+    }, (r) async {
+      emit(state.copyWith(
+          presignedStatus: WidgetStatus.success, status: WidgetStatus.initial));
     });
   }
 

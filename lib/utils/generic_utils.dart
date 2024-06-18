@@ -36,6 +36,7 @@ class GenericUtils {
 
                 final photo = PhotoModel(
                   file: file,
+                  name: pickedFile.name,
                   id: DateTime.now().toIso8601String(),
                 );
 

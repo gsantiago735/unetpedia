@@ -200,6 +200,7 @@ class __ContentState extends State<_Content> {
             labelText: "Apellido",
             hintText: "Ingresar apellido",
             keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.words,
             validator: (value) => Validators.emptyValidation(value),
             controller: _lastNameController,
           ),
@@ -286,6 +287,7 @@ class __ContentState extends State<_Content> {
                         description: _descriptionController.text.trim(),
                         career: state.degreeSelected!.id!,
                         role: 2, // 1 Tutor, 2 Estudiante
+                        profilePhotoName: state.photoSelected!.name,
                       );
 
                       // Consumiendo el endpoint de registro

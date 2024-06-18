@@ -6,6 +6,7 @@ class RegisterRequestModel {
   final int role;
   final String description;
   final int career;
+  final String profilePhotoName;
 
   RegisterRequestModel({
     required this.name,
@@ -15,6 +16,7 @@ class RegisterRequestModel {
     required this.role,
     required this.description,
     required this.career,
+    required this.profilePhotoName,
   });
 
   RegisterRequestModel copyWith({
@@ -25,6 +27,7 @@ class RegisterRequestModel {
     int? role,
     String? description,
     int? career,
+    String? profilePhotoName,
   }) =>
       RegisterRequestModel(
         name: name ?? this.name,
@@ -34,6 +37,7 @@ class RegisterRequestModel {
         role: role ?? this.role,
         description: description ?? this.description,
         career: career ?? this.career,
+        profilePhotoName: profilePhotoName ?? this.profilePhotoName,
       );
 
   // factory RegisterRequestModel.fromJson(Map<String, dynamic> json) => RegisterRequestModel(
@@ -53,5 +57,6 @@ class RegisterRequestModel {
         "role": role,
         "description": description,
         "career": career,
+        "profilePhoto": profilePhotoName,
       };
 }

@@ -1,30 +1,23 @@
 class CategoriesResponseModel {
-  final List<CategoryResponseModel>? data;
   final int? count;
-  final Pages? pages;
+  final List<CategoryResponseModel>? data;
 
-  CategoriesResponseModel({
-    this.data,
-    this.count,
-    this.pages,
-  });
+  CategoriesResponseModel({this.count, this.data});
 
   factory CategoriesResponseModel.fromJson(Map<String, dynamic> json) =>
       CategoriesResponseModel(
-        data: json["data"] == null
+        count: json["count"],
+        data: (json["data"] == null)
             ? []
             : List<CategoryResponseModel>.from(
                 json["data"]!.map((x) => CategoryResponseModel.fromJson(x))),
-        count: json["count"],
-        pages: json["pages"] == null ? null : Pages.fromJson(json["pages"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "count": count,
         "data": data == null
             ? []
             : List<dynamic>.from(data!.map((x) => x.toJson())),
-        "count": count,
-        "pages": pages?.toJson(),
       };
 }
 
@@ -64,25 +57,5 @@ class Count {
 
   Map<String, dynamic> toJson() => {
         "Subject": subject,
-      };
-}
-
-class Pages {
-  final dynamic next;
-  final dynamic previous;
-
-  Pages({
-    this.next,
-    this.previous,
-  });
-
-  factory Pages.fromJson(Map<String, dynamic> json) => Pages(
-        next: json["next"],
-        previous: json["previous"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "next": next,
-        "previous": previous,
       };
 }

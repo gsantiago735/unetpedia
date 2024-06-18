@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unetpedia/models/authentication/register_response_model.dart';
 import 'package:unetpedia/providers/providers.dart';
 import 'package:unetpedia/models/generic/generic.dart';
-import 'package:unetpedia/models/subject/categories_response_model.dart';
+import 'package:unetpedia/models/subject/subject.dart';
+import 'package:unetpedia/models/authentication/register_response_model.dart';
 
 part 'general_state.dart';
 
@@ -14,6 +14,15 @@ class GeneralCubit extends Cubit<GeneralState> {
   final _authenticationProvider = AuthenticationProvider();
 
   void clean() => emit(const GeneralState());
+
+  void selectCategory(CategoryResponseModel? value) {
+    emit(state.copyWith(
+      categorySelected: Wrapped.value(value),
+      subjectsResponseModel: const Wrapped.value(null),
+      subjectsStatus: WidgetStatus.initial,
+      moreSubjectsStatus: WidgetStatus.initial,
+    ));
+  }
 
   // =======================================================================
   // Degree
@@ -89,6 +98,54 @@ class GeneralCubit extends Cubit<GeneralState> {
       emit(state.copyWith(
         categoryStatus: WidgetStatus.success,
         categoriesResponseModel: Wrapped.value(r),
+      ));
+    });
+  }
+
+  // =======================================================================
+  // Subjects
+  // =======================================================================
+
+  // Subjects List with pagination
+  Future<void> getSubjects() async {
+    if (state.subjectsStatus == WidgetStatus.loading ||
+        state.moreSubjectsStatus == WidgetStatus.loading) return;
+
+    int? page = 1;
+
+    if (state.subjectsResponseModel != null) {
+      if ((state.subjectsResponseModel?.pages?.next) == null) return;
+
+      page = state.subjectsResponseModel?.pages?.next;
+    }
+
+    if (page != 1) {
+      emit(state.copyWith(moreSubjectsStatus: WidgetStatus.loading));
+    } else {
+      emit(state.copyWith(subjectsStatus: WidgetStatus.loading));
+    }
+
+    final response = await _genericProvider.getSubjects(
+        page: page!, categoryId: state.categorySelected!.id!);
+
+    return response.fold((l) {
+      if (page != 1) {
+        emit(state.copyWith(
+            moreSubjectsStatus: WidgetStatus.error, errorText: l.details));
+      } else {
+        emit(state.copyWith(
+            subjectsStatus: WidgetStatus.error, errorText: l.details));
+      }
+    }, (r) async {
+      emit(state.copyWith(
+        subjectsStatus: WidgetStatus.success,
+        moreSubjectsStatus: WidgetStatus.success,
+        subjectsResponseModel: Wrapped.value(
+            (state.subjectsResponseModel ?? SubjectsResponseModel()).copyWith(
+          data: [...(state.subjectsResponseModel?.data ?? []), ...r.data!],
+          pages: r.pages,
+          count: r.count,
+        )),
       ));
     });
   }

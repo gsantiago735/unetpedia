@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unetpedia/core/constants/constants_images.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/ui/cubit/cubit.dart';
 import 'package:unetpedia/ui/home/home.dart';
@@ -67,6 +68,7 @@ class _HomeViewState extends State<HomeView> {
                           title: "Asignaturas",
                           description:
                               "Encuentra el contenido de cada materia.",
+                          asset: ConstantImages.greenCard,
                           onPressed: () {
                             Navigator.pushNamed(
                                 context, DepartmentsView.routeName);
@@ -77,6 +79,7 @@ class _HomeViewState extends State<HomeView> {
                           title: "Tutores",
                           description:
                               "Encuentra tutor para ayuda en cada materia.",
+                          asset: ConstantImages.yellowCard,
                           onPressed: () {},
                         ),
                         const SizedBox(height: 20),
@@ -84,6 +87,7 @@ class _HomeViewState extends State<HomeView> {
                           title: "Calcula Tu Nota",
                           description:
                               "Calcula lo que te falta para cada parcial.",
+                          asset: ConstantImages.blueCard,
                           onPressed: () {},
                         ),
                       ],

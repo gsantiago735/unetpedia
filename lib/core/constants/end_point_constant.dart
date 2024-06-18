@@ -10,4 +10,7 @@ class EndPointConstant {
 
   // Departamentos
   static const String categories = "category";
+
+  // Materias
+  static const String subjects = "subject";
 }

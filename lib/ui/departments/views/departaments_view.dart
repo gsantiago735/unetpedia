@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/ui/cubit/cubit.dart';
 import 'package:unetpedia/widgets/widgets.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
+import 'package:unetpedia/core/constants/constants_images.dart';
 import 'package:unetpedia/ui/subjects/views/subjects_view.dart';
 
 class DepartmentsView extends StatelessWidget {
@@ -68,12 +69,15 @@ class _ContentState extends State<_Content> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 16),
                       itemBuilder: (context, index) {
-                        final data =
+                        final department =
                             state.categoriesResponseModel?.data?[index];
                         return GenericCard(
-                          title: data?.name ?? "N/A",
-                          subtitle: data?.count?.subject.toString() ?? "0",
+                          title: department?.name ?? "N/A",
+                          subtitle:
+                              "${department?.count?.subject.toString()} Materias",
+                          asset: ConstantImages.blueCard,
                           onPressed: () {
+                            cubit.selectCategory(department);
                             Navigator.pushNamed(
                                 context, SubjectsView.routeName);
                           },

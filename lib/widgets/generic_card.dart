@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unetpedia/core/constants/constant_colors.dart';
 
 class GenericCard extends StatelessWidget {
-  const GenericCard(
-      {super.key,
-      required this.title,
-      required this.subtitle,
-      required this.onPressed});
+  const GenericCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.asset,
+    required this.onPressed,
+  });
 
   final String title;
   final String subtitle;
+  final String asset;
   final VoidCallback onPressed;
 
   @override
@@ -39,12 +43,13 @@ class GenericCard extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(18)),
+                    ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                      child: Container(
+                        height: 70,
+                        width: 70,
+                        color: Colors.grey,
+                        child: SvgPicture.asset(asset, fit: BoxFit.fill),
                       ),
                     ),
                     const SizedBox(width: 12),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unetpedia/core/constants/constant_colors.dart';
 
 class HomeSectionCard extends StatelessWidget {
@@ -6,11 +7,13 @@ class HomeSectionCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
+    required this.asset,
     required this.onPressed,
   });
 
   final String title;
   final String description;
+  final String asset;
   final VoidCallback onPressed;
 
   @override
@@ -31,12 +34,13 @@ class HomeSectionCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Container(
-                  height: 90,
-                  width: 100,
-                  decoration: const BoxDecoration(
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: Container(
+                    height: 90,
+                    width: 100,
                     color: Colors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: SvgPicture.asset(asset, fit: BoxFit.fill),
                   ),
                 ),
                 const SizedBox(width: 10),

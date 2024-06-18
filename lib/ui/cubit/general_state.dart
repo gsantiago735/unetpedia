@@ -10,6 +10,10 @@ class GeneralState extends Equatable {
     this.logOutStatus = WidgetStatus.initial,
     this.categoryStatus = WidgetStatus.initial,
     this.categoriesResponseModel,
+    this.subjectsStatus = WidgetStatus.initial,
+    this.subjectsResponseModel,
+    this.categorySelected,
+    this.moreSubjectsStatus = WidgetStatus.initial,
   });
 
   // General
@@ -26,7 +30,13 @@ class GeneralState extends Equatable {
 
   // Categories (Departaments)
   final WidgetStatus categoryStatus;
+  final CategoryResponseModel? categorySelected;
   final CategoriesResponseModel? categoriesResponseModel;
+
+  // Subjects
+  final WidgetStatus subjectsStatus;
+  final WidgetStatus moreSubjectsStatus;
+  final SubjectsResponseModel? subjectsResponseModel;
 
   @override
   List<Object?> get props => [
@@ -38,6 +48,10 @@ class GeneralState extends Equatable {
         logOutStatus,
         categoryStatus,
         categoriesResponseModel,
+        subjectsStatus,
+        subjectsResponseModel,
+        categorySelected,
+        moreSubjectsStatus,
       ];
 
   GeneralState copyWith({
@@ -49,19 +63,32 @@ class GeneralState extends Equatable {
     WidgetStatus? logOutStatus,
     WidgetStatus? categoryStatus,
     Wrapped<CategoriesResponseModel?>? categoriesResponseModel,
+    WidgetStatus? subjectsStatus,
+    Wrapped<SubjectsResponseModel?>? subjectsResponseModel,
+    Wrapped<CategoryResponseModel?>? categorySelected,
+    WidgetStatus? moreSubjectsStatus,
   }) {
     return GeneralState(
-        errorText: errorText ?? this.errorText,
-        degrees: degrees != null ? degrees.value : this.degrees,
-        degreesStatus: degreesStatus ?? this.degreesStatus,
-        getUserStatus: getUserStatus ?? this.getUserStatus,
-        userResponseModel: userResponseModel != null
-            ? userResponseModel.value
-            : this.userResponseModel,
-        logOutStatus: logOutStatus ?? this.logOutStatus,
-        categoryStatus: categoryStatus ?? this.categoryStatus,
-        categoriesResponseModel: categoriesResponseModel != null
-            ? categoriesResponseModel.value
-            : this.categoriesResponseModel);
+      errorText: errorText ?? this.errorText,
+      degrees: degrees != null ? degrees.value : this.degrees,
+      degreesStatus: degreesStatus ?? this.degreesStatus,
+      getUserStatus: getUserStatus ?? this.getUserStatus,
+      userResponseModel: userResponseModel != null
+          ? userResponseModel.value
+          : this.userResponseModel,
+      logOutStatus: logOutStatus ?? this.logOutStatus,
+      categoryStatus: categoryStatus ?? this.categoryStatus,
+      categoriesResponseModel: categoriesResponseModel != null
+          ? categoriesResponseModel.value
+          : this.categoriesResponseModel,
+      subjectsStatus: subjectsStatus ?? this.subjectsStatus,
+      subjectsResponseModel: subjectsResponseModel != null
+          ? subjectsResponseModel.value
+          : this.subjectsResponseModel,
+      categorySelected: categorySelected != null
+          ? categorySelected.value
+          : this.categorySelected,
+      moreSubjectsStatus: moreSubjectsStatus ?? this.moreSubjectsStatus,
+    );
   }
 }

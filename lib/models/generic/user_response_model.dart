@@ -5,6 +5,7 @@ class UserResponseModel {
   final String? name;
   final String? lastName;
   final String? email;
+  final String? photo;
   final int? roleId;
   final String? description;
   final int? careerId;
@@ -16,6 +17,7 @@ class UserResponseModel {
     this.name,
     this.lastName,
     this.email,
+    this.photo,
     this.roleId,
     this.description,
     this.careerId,
@@ -29,6 +31,7 @@ class UserResponseModel {
         name: json["name"],
         lastName: json["lastName"],
         email: json["email"],
+        photo: json["photo"],
         roleId: json["role_id"],
         description: json["description"],
         careerId: json["career_id"],
@@ -45,6 +48,7 @@ class UserResponseModel {
         "name": name,
         "lastName": lastName,
         "email": email,
+        "photo": photo,
         "role_id": roleId,
         "description": description,
         "career_id": careerId,

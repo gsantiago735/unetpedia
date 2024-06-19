@@ -5,6 +5,7 @@ import 'package:unetpedia/core/constants/constant_api.dart';
 
 class Api {
   final dio = createDio();
+  final noBearer = noBearerDio();
   final dioFormData = createDioFormData();
 
   static Dio createDio() {
@@ -15,6 +16,16 @@ class Api {
       sendTimeout: const Duration(minutes: 3),
     ));
     dio.interceptors.addAll({AppInterceptors(dio)});
+    return dio;
+  }
+
+  static Dio noBearerDio() {
+    var dio = Dio(BaseOptions(
+      baseUrl: ConstantApi.url,
+      connectTimeout: const Duration(hours: 1),
+      receiveTimeout: const Duration(hours: 1),
+      sendTimeout: const Duration(hours: 1),
+    ));
     return dio;
   }
 

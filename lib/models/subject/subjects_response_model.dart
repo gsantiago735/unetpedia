@@ -39,19 +39,46 @@ class SubjectResponseModel {
   final String? name;
   final int? id;
   final CategoryResponseModel? category;
+  final CountSubject? countSubject;
 
   SubjectResponseModel({
     this.name,
     this.id,
     this.category,
+    this.countSubject,
   });
 
   factory SubjectResponseModel.fromJson(Map<String, dynamic> json) =>
       SubjectResponseModel(
         name: json["name"],
         id: json["id"],
-        category: json["Category"] == null
+        category: (json["Category"] == null)
             ? null
             : CategoryResponseModel.fromJson(json["Category"]),
+        countSubject: (json["_count"] == null)
+            ? null
+            : CountSubject.fromJson(json["_count"]),
       );
+}
+
+class CountSubject {
+  final int? count;
+
+  CountSubject({this.count});
+
+  factory CountSubject.fromJson(Map<String, dynamic> json) => CountSubject(
+        count: json["Document"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Document": count,
+      };
+
+  String get countText {
+    if ((count ?? 0) > 0) {
+      return "$count Documentos";
+    } else {
+      return "Sin Documentos";
+    }
+  }
 }

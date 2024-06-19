@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/ui/cubit/cubit.dart';
+import 'package:unetpedia/utils/debouncer.dart';
 import 'package:unetpedia/widgets/widgets.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/core/constants/constants_images.dart';
@@ -12,14 +13,14 @@ class DepartmentsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: MainAppBar(title: "Departamentos"),
+    return Scaffold(
+      appBar: const MainAppBar(title: "Departamentos"),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _Header(),
-          SizedBox(height: 28),
-          Expanded(child: _Content()),
+          const SizedBox(height: 28),
+          const Expanded(child: _Content()),
         ],
       ),
     );
@@ -97,14 +98,24 @@ class _ContentState extends State<_Content> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header();
+  _Header();
+
+  final _debouncer = Debouncer(milliseconds: 500);
 
   @override
   Widget build(BuildContext context) {
-    return const AppBarLayout(
+    return AppBarLayout(
       child: SearchInput(
+        controller: TextEditingController(
+            text: context.read<GeneralCubit>().state.categoryQuery),
         hintText: "Buscar Departamento",
         prefixIcon: Icons.search_rounded,
+        onChange: (value) {
+          _debouncer.run(() {
+            context.read<GeneralCubit>().setCategoryQuery(value);
+            context.read<GeneralCubit>().getCategories();
+          });
+        },
       ),
     );
   }

@@ -15,13 +15,29 @@ class GeneralCubit extends Cubit<GeneralState> {
 
   void clean() => emit(const GeneralState());
 
+  void setCategoryQuery(String value) {
+    emit(state.copyWith(categoryQuery: value));
+  }
+
+  void setSubjectQuery(String value) {
+    emit(state.copyWith(
+      subjectQuery: value,
+      subjectsResponseModel: const Wrapped.value(null),
+    ));
+  }
+
   void selectCategory(CategoryResponseModel? value) {
     emit(state.copyWith(
       categorySelected: Wrapped.value(value),
       subjectsResponseModel: const Wrapped.value(null),
       subjectsStatus: WidgetStatus.initial,
       moreSubjectsStatus: WidgetStatus.initial,
+      subjectQuery: "",
     ));
+  }
+
+  void selectSubject(SubjectResponseModel? value) {
+    emit(state.copyWith(subjectSelected: Wrapped.value(value)));
   }
 
   // =======================================================================
@@ -89,7 +105,8 @@ class GeneralCubit extends Cubit<GeneralState> {
     if (state.categoryStatus == WidgetStatus.loading) return;
     emit(state.copyWith(categoryStatus: WidgetStatus.loading));
 
-    final response = await _genericProvider.getCategories();
+    final response =
+        await _genericProvider.getCategories(query: state.categoryQuery);
 
     return response.fold((l) {
       emit(state.copyWith(
@@ -126,7 +143,10 @@ class GeneralCubit extends Cubit<GeneralState> {
     }
 
     final response = await _genericProvider.getSubjects(
-        page: page!, categoryId: state.categorySelected!.id!);
+      page: page!,
+      categoryId: state.categorySelected!.id!,
+      query: state.subjectQuery,
+    );
 
     return response.fold((l) {
       if (page != 1) {

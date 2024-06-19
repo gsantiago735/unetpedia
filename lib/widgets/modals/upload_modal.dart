@@ -31,7 +31,7 @@ class UploadModal extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                    child: _UploadOption(
+                    child: UploadOption(
                   title: "Tomar una Foto",
                   icon: Icons.camera_alt_rounded,
                   onPressed: () async {
@@ -45,7 +45,7 @@ class UploadModal extends StatelessWidget {
                 )),
                 const SizedBox(width: 8),
                 Expanded(
-                    child: _UploadOption(
+                    child: UploadOption(
                   title: "Subir desde Galería",
                   icon: Icons.collections_rounded,
                   onPressed: () async {
@@ -65,9 +65,12 @@ class UploadModal extends StatelessWidget {
   }
 }
 
-class _UploadOption extends StatelessWidget {
-  const _UploadOption(
-      {required this.title, required this.icon, required this.onPressed});
+class UploadOption extends StatelessWidget {
+  const UploadOption(
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.onPressed});
 
   final String title;
   final IconData icon;

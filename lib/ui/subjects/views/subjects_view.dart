@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unetpedia/models/subject/subjects_response_model.dart';
 import 'package:unetpedia/ui/cubit/cubit.dart';
+import 'package:unetpedia/utils/debouncer.dart';
 import 'package:unetpedia/widgets/widgets.dart';
 import 'package:unetpedia/ui/subjects/views/views.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/core/constants/constants_images.dart';
+import 'package:unetpedia/models/subject/subjects_response_model.dart';
 
 class SubjectsView extends StatefulWidget {
   const SubjectsView({super.key});
@@ -32,7 +33,7 @@ class _SubjectsViewState extends State<SubjectsView> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const _Header(),
+          _Header(),
           const SizedBox(height: 28),
           Expanded(
             child: BlocBuilder<GeneralCubit, GeneralState>(
@@ -108,9 +109,10 @@ class __ContentState extends State<_Content> {
               in state.subjectsResponseModel!.data!) {
             children.add(GenericCard(
               title: subject?.name ?? "N/A",
-              subtitle: "N/A Documentos",
+              subtitle: subject?.countSubject?.countText ?? "N/A",
               asset: ConstantImages.redCard,
               onPressed: () {
+                cubit.selectSubject(subject);
                 Navigator.pushNamed(context, SubjectDetailView.routeName);
               },
             ));
@@ -139,14 +141,24 @@ class __ContentState extends State<_Content> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header();
+  _Header();
+
+  final _debouncer = Debouncer(milliseconds: 500);
 
   @override
   Widget build(BuildContext context) {
-    return const AppBarLayout(
+    return AppBarLayout(
       child: SearchInput(
+        controller: TextEditingController(
+            text: context.read<GeneralCubit>().state.subjectQuery),
         hintText: "Buscar Materia",
         prefixIcon: Icons.search_rounded,
+        onChange: (value) {
+          _debouncer.run(() {
+            context.read<GeneralCubit>().setSubjectQuery(value);
+            context.read<GeneralCubit>().getSubjects();
+          });
+        },
       ),
     );
   }

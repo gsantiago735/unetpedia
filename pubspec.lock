@@ -81,6 +81,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      sha256: "0f08b14755d163f6e2134cb58222dd25ea2a2ee8a195e53983d57c075324d592"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   cross_file:
     dependency: transitive
     description:
@@ -685,6 +693,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: "2cd3a1c59bd9c2863eee96cc5400429ecc7b42cd1e7379f3eb5ccd9fc2e9306b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "26.1.38"
+  syncfusion_flutter_pdf:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_pdf
+      sha256: "6412b286e2946f4865d835500fe08293a171f6e3d0907843088fb66e7d004cd9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "26.1.38"
   synchronized:
     dependency: transitive
     description:

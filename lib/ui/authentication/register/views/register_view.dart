@@ -277,7 +277,8 @@ class __ContentState extends State<_Content> {
 
                     // Validando el formulario
                     if (_formKey.currentState!.validate() &&
-                        state.degreeSelected?.id != null) {
+                        state.degreeSelected?.id != null &&
+                        state.photoSelected != null) {
                       // Creando entidad de registro
                       final body = RegisterRequestModel(
                         email: _emailController.text.trim(),

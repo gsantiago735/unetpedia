@@ -9,8 +9,12 @@ class EndPointConstant {
   static const String changePassword = "user/changePassword";
 
   // Departamentos
-  static const String categories = "category";
+  static const String getCategories = "category";
 
   // Materias
-  static const String subjects = "subject";
+  static const String getSubjects = "subject";
+
+  // Documents
+  static const String getDocuments = "docs/subject";
+  static const String addDocument = "docs";
 }

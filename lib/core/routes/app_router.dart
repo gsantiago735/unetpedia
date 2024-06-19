@@ -23,5 +23,7 @@ class AppRouter {
     SubjectsView.routeName: (BuildContext contex) => const SubjectsView(),
     SubjectDetailView.routeName: (BuildContext contex) =>
         const SubjectDetailView(),
+    AddSubjectDocumentView.routeName: (context) =>
+        const AddSubjectDocumentView(),
   };
 }

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unetpedia/widgets/buttons/generic_icon_button.dart';
 
 class SubjectCard extends StatelessWidget {
   const SubjectCard({
     super.key,
     required this.title,
+    required this.asset,
     required this.onPressed,
     this.onDownload,
     this.onWatch,
   });
 
   final String title;
+  final String asset;
   final VoidCallback onPressed;
   final VoidCallback? onDownload;
   final VoidCallback? onWatch;
@@ -42,12 +45,13 @@ class SubjectCard extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(18)),
+                    ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                      child: Container(
+                        height: 70,
+                        width: 70,
+                        color: Colors.grey,
+                        child: SvgPicture.asset(asset, fit: BoxFit.fill),
                       ),
                     ),
                     const SizedBox(width: 12),

@@ -70,6 +70,7 @@ class _HomeViewState extends State<HomeView> {
                               "Encuentra el contenido de cada materia.",
                           asset: ConstantImages.greenCard,
                           onPressed: () {
+                            _cubit.setCategoryQuery("");
                             Navigator.pushNamed(
                                 context, DepartmentsView.routeName);
                           },

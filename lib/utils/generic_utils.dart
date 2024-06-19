@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:unetpedia/models/generic/file_model.dart';
 import 'package:unetpedia/models/generic/photo_model.dart';
 
 class GenericUtils {
@@ -60,6 +62,30 @@ class GenericUtils {
       });
     } catch (e) {
       log("Ha ocurrido un error ${e.toString()}");
+    }
+  }
+
+  // Seleccion de archivoo desde el dispositivo
+  static Future<void> getFileFromDevice({
+    required void Function(FileModel) onGetFiles,
+    List<String> allowedExtensions = const ["pdf"],
+  }) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowMultiple: false,
+      allowedExtensions: allowedExtensions,
+    );
+
+    if (result != null) {
+      var documents = result.files.single.path!;
+
+      final file = FileModel(
+        id: DateTime.now().toIso8601String(),
+        name: result.names.single ?? "unknown",
+        file: File(documents),
+      );
+
+      onGetFiles(file);
     }
   }
 }

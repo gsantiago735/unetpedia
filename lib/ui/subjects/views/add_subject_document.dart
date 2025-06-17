@@ -50,10 +50,10 @@ class AddSubjectDocumentView extends StatelessWidget {
                       title: "Operación exitosa.",
                       description: "Archivo subido.",
                       onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
                         context.read<GeneralCubit>().getSubjects();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                     ),
                   );

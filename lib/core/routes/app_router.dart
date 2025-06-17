@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:unetpedia/ui/qualifications/qualifications_view.dart';
+import 'package:unetpedia/ui/qualifications/tutors_view.dart';
 import 'package:unetpedia/ui/ui.dart';
 
 class AppRouter {
@@ -25,5 +27,12 @@ class AppRouter {
         const SubjectDetailView(),
     AddSubjectDocumentView.routeName: (context) =>
         const AddSubjectDocumentView(),
+    SubjectDocumentView.routeName: (context) => const SubjectDocumentView(),
+
+    // Qualification
+    QualificationView.routeName: (context) => const QualificationView(),
+
+    //
+    TutorsView.routeName: (context) => const TutorsView(),
   };
 }

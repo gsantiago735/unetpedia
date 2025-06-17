@@ -17,4 +17,7 @@ class EndPointConstant {
   // Documents
   static const String getDocuments = "docs/subject";
   static const String addDocument = "docs";
+
+  // Qualification
+  static const String qualification = "qualification";
 }

@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:unetpedia/models/generic/file_model.dart';
 import 'package:unetpedia/models/generic/photo_model.dart';
@@ -86,6 +88,63 @@ class GenericUtils {
       );
 
       onGetFiles(file);
+    }
+  }
+
+  /////////////////////////
+  /// TODO mejorar
+
+  static Future<String> _findLocalPathDownloads() async {
+    if (Platform.isAndroid) {
+      Directory directory = Directory('/storage/emulated/0/Download/');
+      return directory.path;
+    } else {
+      var directory = await getApplicationDocumentsDirectory();
+      return '${directory.path}${Platform.pathSeparator}Download${Platform.pathSeparator}';
+    }
+  }
+
+  static Future<File?> checkDownloadFile(
+      {required String url,
+      required String fileName,
+      bool downloadPublic = true}) async {
+    try {
+      Directory dir = await getApplicationDocumentsDirectory();
+      String? localPath;
+      if (dir.path.endsWith(Platform.pathSeparator) ||
+          fileName.startsWith(Platform.pathSeparator)) {
+        localPath = '${dir.path}$fileName';
+      } else {
+        localPath = '${dir.path}${Platform.pathSeparator}$fileName';
+      }
+
+      File file = File(localPath);
+      if (!(await file.exists())) {
+        await Dio().download(url, localPath);
+      }
+      if (downloadPublic) {
+        try {
+          String path = await _findLocalPathDownloads(/*type*/);
+          String publicPath = '$path$fileName';
+          File publicFile = File(publicPath);
+          if (!(await publicFile.exists())) {
+            await file.copy(publicFile.path);
+          } else {
+            //ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            //    content:
+            //        Text('El Archivo ya esta en su carpeta de descargas')));
+          }
+        } catch (e) {
+          throw 'Cant download file in public folder';
+        }
+      }
+      //ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //    content: Text('Archivo guardado en su carpeta de descargas')));
+      return file;
+    } catch (e) {
+      //ScaffoldMessenger.of(context).showSnackBar(
+      //    const SnackBar(content: Text('No se puede descargar el archivo')));
+      return null;
     }
   }
 }

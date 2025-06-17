@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unetpedia/core/constants/constants_images.dart';
 import 'package:unetpedia/utils/debouncer.dart';
 import 'package:unetpedia/widgets/widgets.dart';
 import 'package:unetpedia/ui/subjects/subjects.dart';
 import 'package:unetpedia/ui/cubit/general_cubit.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
+import 'package:unetpedia/core/constants/constants_images.dart';
 import 'package:unetpedia/models/documents/documents_response_model.dart';
 
 class SubjectDetailView extends StatelessWidget {
@@ -128,7 +128,12 @@ class __RenderContentState extends State<_RenderContent> {
             children.add(SubjectCard(
               title: document?.name ?? "N/A",
               asset: ConstantImages.yellowCard,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, SubjectDocumentView.routeName);
+              },
+              onWatch: () {
+                Navigator.pushNamed(context, SubjectDocumentView.routeName);
+              },
             ));
           }
 

@@ -67,4 +67,6 @@ class GenericProvider {
       return Left(DataException(details: e.toString()));
     }
   }
+
+  // Get Qualification
 }

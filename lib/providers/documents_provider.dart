@@ -7,7 +7,7 @@ import 'package:unetpedia/core/constants/end_point_constant.dart';
 import 'package:unetpedia/models/generic/data_exception_model.dart';
 
 class DocumentsProvider {
-  // Get Subjects List
+  // Get Documents List
   Future<Either<DataException, DocumentsResponseModel>> getDocuments(
       {required int page, required int subjectId, required String name}) async {
     final params = {"page": page, "name": name};
@@ -55,6 +55,20 @@ class DocumentsProvider {
           );
 
       return Right(response.data.toString());
+    } on DioException catch (e) {
+      return Left(DataException(details: e.response?.data.toString()));
+    } catch (e) {
+      return Left(DataException(details: e.toString()));
+    }
+  }
+
+  // Get Document Detail
+  Future<Either<DataException, DetailDocumentResponseModel>> getDocument(
+      {required int docId}) async {
+    try {
+      final response =
+          await Api().dio.get("${EndPointConstant.addDocument}/$docId");
+      return Right(DetailDocumentResponseModel.fromJson(response.data));
     } on DioException catch (e) {
       return Left(DataException(details: e.response?.data.toString()));
     } catch (e) {

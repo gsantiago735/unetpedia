@@ -6,6 +6,7 @@ import 'package:unetpedia/models/documents/documents.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/providers/documents_provider.dart';
 import 'package:unetpedia/models/subject/subjects_response_model.dart';
+import 'package:unetpedia/utils/generic_utils.dart';
 
 part 'subjects_state.dart';
 
@@ -77,6 +78,24 @@ class SubjectsCubit extends Cubit<SubjectsState> {
     });
   }
 
+  Future<void> getDocumentDetail() async {
+    if (state.getDocumentsStatus == WidgetStatus.loading) return;
+    emit(state.copyWith(getDocumentsStatus: WidgetStatus.loading));
+
+    final response = await _documentsProvider.getDocument(docId: 26);
+
+    return response.fold((l) {
+      emit(state.copyWith(
+          getDocumentsStatus: WidgetStatus.error, errorText: l.details));
+    }, (r) async {
+      emit(state.copyWith(
+        //getDocumentsStatus: WidgetStatus.success,
+        documentDetail: Wrapped.value(r.data),
+      ));
+      await _download();
+    });
+  }
+
   // ========================================================================
   // Upload Documents
   // ========================================================================
@@ -106,12 +125,23 @@ class SubjectsCubit extends Cubit<SubjectsState> {
     );
 
     return response.fold((l) {
-      print("Mal2");
       emit(state.copyWith(
           errorText: l.details, uploadStatus: WidgetStatus.initial));
     }, (r) async {
-      print("Bien2");
       emit(state.copyWith(uploadStatus: WidgetStatus.success));
     });
+  }
+
+  // Download
+
+  Future<void> _download() async {
+    final file = await GenericUtils.checkDownloadFile(
+        url: state.documentDetail!.url!, fileName: state.documentDetail!.name!);
+
+    emit(state.copyWith(
+      fileSelected:
+          Wrapped.value(FileModel(id: "0", name: "name", file: file!)),
+      getDocumentsStatus: WidgetStatus.success,
+    ));
   }
 }

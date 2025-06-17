@@ -4,6 +4,8 @@ import 'package:unetpedia/core/constants/constants_images.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/ui/cubit/cubit.dart';
 import 'package:unetpedia/ui/home/home.dart';
+import 'package:unetpedia/ui/qualifications/qualifications_view.dart';
+import 'package:unetpedia/ui/qualifications/tutors_view.dart';
 import 'package:unetpedia/widgets/widgets.dart';
 import 'package:unetpedia/ui/departments/departments.dart';
 
@@ -81,7 +83,9 @@ class _HomeViewState extends State<HomeView> {
                           description:
                               "Encuentra tutor para ayuda en cada materia.",
                           asset: ConstantImages.yellowCard,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, TutorsView.routeName);
+                          },
                         ),
                         const SizedBox(height: 20),
                         HomeSectionCard(
@@ -89,7 +93,10 @@ class _HomeViewState extends State<HomeView> {
                           description:
                               "Calcula lo que te falta para cada parcial.",
                           asset: ConstantImages.blueCard,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, QualificationView.routeName);
+                          },
                         ),
                       ],
                     );

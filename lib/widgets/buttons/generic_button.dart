@@ -23,12 +23,13 @@ class GenericButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(
-          minimumSize: const MaterialStatePropertyAll(Size(0, 48)),
-          shape: const MaterialStatePropertyAll(
+          minimumSize: const WidgetStatePropertyAll(Size(0, 48)),
+          shape: const WidgetStatePropertyAll(
             RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(24))),
+              borderRadius: BorderRadius.all(Radius.circular(24)),
+            ),
           ),
-          backgroundColor: MaterialStatePropertyAll(color),
+          backgroundColor: WidgetStatePropertyAll(color),
         ),
         child: Text(
           text,

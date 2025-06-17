@@ -12,7 +12,8 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider<GeneralCubit>(
-            create: (BuildContext context) => GeneralCubit()),
+          create: (BuildContext context) => GeneralCubit(),
+        ),
       ],
       child: const MainApp(),
     ),

@@ -33,10 +33,12 @@ class _MainAppBarState extends State<MainAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: widget.centerTitle,
-      backgroundColor:
-          (widget.isWhite) ? Colors.white : ConstantColors.cff141718,
-      surfaceTintColor:
-          (widget.isWhite) ? Colors.white : ConstantColors.cff141718,
+      backgroundColor: (widget.isWhite)
+          ? Colors.white
+          : ConstantColors.cff141718,
+      surfaceTintColor: (widget.isWhite)
+          ? Colors.white
+          : ConstantColors.cff141718,
       actions: widget.actions,
       leading: (widget.needsGoback)
           ? IconButton(
@@ -45,7 +47,7 @@ class _MainAppBarState extends State<MainAppBar> {
                 color: (widget.isWhite) ? Colors.black : Colors.white,
               ),
               style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+                backgroundColor: WidgetStatePropertyAll(Colors.transparent),
               ),
               onPressed: (widget.onBack != null)
                   ? widget.onBack

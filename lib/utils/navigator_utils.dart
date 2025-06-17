@@ -5,8 +5,10 @@ import 'package:unetpedia/utils/local_storage.dart';
 
 class NavigatorUtils {
   /// Resetea los cubits generales, cierra sesión y redirecciona al Login
-  static Future<void> resetSession(BuildContext context,
-      {bool needsLogOut = true}) async {
+  static Future<void> resetSession(
+    BuildContext context, {
+    bool needsLogOut = true,
+  }) async {
     final generalCubit = context.read<GeneralCubit>();
 
     if (needsLogOut) {
@@ -16,6 +18,7 @@ class NavigatorUtils {
     generalCubit.clean();
 
     await LocalStorage.deleteSession().then((_) {
+      if (!context.mounted) return;
       Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
     });
   }

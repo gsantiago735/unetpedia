@@ -16,11 +16,13 @@ class GenericIconButton extends StatelessWidget {
       //visualDensity: VisualDensity.compact,
       color: ConstantColors.cff141718,
       style: ButtonStyle(
-        backgroundColor: const MaterialStatePropertyAll(Colors.white),
-        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(width: 2, color: Color(0xFFD9D9D9)),
-        )),
+        backgroundColor: const WidgetStatePropertyAll(Colors.white),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(width: 2, color: Color(0xFFD9D9D9)),
+          ),
+        ),
       ),
     );
   }

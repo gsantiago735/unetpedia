@@ -20,8 +20,12 @@ class SubjectsCubit extends Cubit<SubjectsState> {
   }
 
   void setDocumentsQuery(String value) {
-    emit(state.copyWith(
-        documentsQuery: value, documents: const Wrapped.value(null)));
+    emit(
+      state.copyWith(
+        documentsQuery: value,
+        documents: const Wrapped.value(null),
+      ),
+    );
   }
 
   void selectFile(FileModel value) {
@@ -34,7 +38,9 @@ class SubjectsCubit extends Cubit<SubjectsState> {
 
   Future<void> getDocuments() async {
     if (state.getDocumentsStatus == WidgetStatus.loading ||
-        state.getMoreDocsStatus == WidgetStatus.loading) return;
+        state.getMoreDocsStatus == WidgetStatus.loading) {
+      return;
+    }
 
     int? page = 1;
 
@@ -56,26 +62,40 @@ class SubjectsCubit extends Cubit<SubjectsState> {
       name: state.documentsQuery,
     );
 
-    return response.fold((l) {
-      if (page != 1) {
-        emit(state.copyWith(
-            getMoreDocsStatus: WidgetStatus.error, errorText: l.details));
-      } else {
-        emit(state.copyWith(
-            getDocumentsStatus: WidgetStatus.error, errorText: l.details));
-      }
-    }, (r) async {
-      emit(state.copyWith(
-        getDocumentsStatus: WidgetStatus.success,
-        getMoreDocsStatus: WidgetStatus.success,
-        documents: Wrapped.value(
-            (state.documents ?? DocumentsResponseModel()).copyWith(
-          data: [...(state.documents?.data ?? []), ...r.data!],
-          pages: r.pages,
-          count: r.count,
-        )),
-      ));
-    });
+    return response.fold(
+      (l) {
+        if (page != 1) {
+          emit(
+            state.copyWith(
+              getMoreDocsStatus: WidgetStatus.error,
+              errorText: l.details,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              getDocumentsStatus: WidgetStatus.error,
+              errorText: l.details,
+            ),
+          );
+        }
+      },
+      (r) async {
+        emit(
+          state.copyWith(
+            getDocumentsStatus: WidgetStatus.success,
+            getMoreDocsStatus: WidgetStatus.success,
+            documents: Wrapped.value(
+              (state.documents ?? DocumentsResponseModel()).copyWith(
+                data: [...(state.documents?.data ?? []), ...r.data!],
+                pages: r.pages,
+                count: r.count,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future<void> getDocumentDetail() async {
@@ -84,16 +104,25 @@ class SubjectsCubit extends Cubit<SubjectsState> {
 
     final response = await _documentsProvider.getDocument(docId: 26);
 
-    return response.fold((l) {
-      emit(state.copyWith(
-          getDocumentsStatus: WidgetStatus.error, errorText: l.details));
-    }, (r) async {
-      emit(state.copyWith(
-        //getDocumentsStatus: WidgetStatus.success,
-        documentDetail: Wrapped.value(r.data),
-      ));
-      await _download();
-    });
+    return response.fold(
+      (l) {
+        emit(
+          state.copyWith(
+            getDocumentsStatus: WidgetStatus.error,
+            errorText: l.details,
+          ),
+        );
+      },
+      (r) async {
+        emit(
+          state.copyWith(
+            //getDocumentsStatus: WidgetStatus.success,
+            documentDetail: Wrapped.value(r.data),
+          ),
+        );
+        await _download();
+      },
+    );
   }
 
   // ========================================================================
@@ -110,12 +139,19 @@ class SubjectsCubit extends Cubit<SubjectsState> {
       subject: state.subjectSelected!.id!,
     );
 
-    return response.fold((l) {
-      emit(state.copyWith(
-          uploadStatus: WidgetStatus.error, errorText: l.details));
-    }, (r) async {
-      await _uploadDocument(r.presignedUrl);
-    });
+    return response.fold(
+      (l) {
+        emit(
+          state.copyWith(
+            uploadStatus: WidgetStatus.error,
+            errorText: l.details,
+          ),
+        );
+      },
+      (r) async {
+        await _uploadDocument(r.presignedUrl);
+      },
+    );
   }
 
   Future<void> _uploadDocument(String? presigned) async {
@@ -124,24 +160,36 @@ class SubjectsCubit extends Cubit<SubjectsState> {
       file: state.fileSelected!,
     );
 
-    return response.fold((l) {
-      emit(state.copyWith(
-          errorText: l.details, uploadStatus: WidgetStatus.initial));
-    }, (r) async {
-      emit(state.copyWith(uploadStatus: WidgetStatus.success));
-    });
+    return response.fold(
+      (l) {
+        emit(
+          state.copyWith(
+            errorText: l.details,
+            uploadStatus: WidgetStatus.initial,
+          ),
+        );
+      },
+      (r) async {
+        emit(state.copyWith(uploadStatus: WidgetStatus.success));
+      },
+    );
   }
 
   // Download
 
   Future<void> _download() async {
     final file = await GenericUtils.checkDownloadFile(
-        url: state.documentDetail!.url!, fileName: state.documentDetail!.name!);
+      url: state.documentDetail!.url!,
+      fileName: state.documentDetail!.name!,
+    );
 
-    emit(state.copyWith(
-      fileSelected:
-          Wrapped.value(FileModel(id: "0", name: "name", file: file!)),
-      getDocumentsStatus: WidgetStatus.success,
-    ));
+    emit(
+      state.copyWith(
+        fileSelected: Wrapped.value(
+          FileModel(id: "0", name: "name", file: file!),
+        ),
+        getDocumentsStatus: WidgetStatus.success,
+      ),
+    );
   }
 }

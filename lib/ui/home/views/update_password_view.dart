@@ -20,66 +20,64 @@ class UpdatePasswordView extends StatelessWidget {
       create: (context) => AuthenticationCubit(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: const MainAppBar(
-          title: "Cambiar Contraseña",
-          isWhite: true,
-        ),
+        appBar: const MainAppBar(title: "Cambiar Contraseña", isWhite: true),
         body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
-            listenWhen: (p, c) => (p.status != c.status),
-            listener: (context, state) {
-              switch (state.status) {
-                case WidgetStatus.error:
-                  showDialog<void>(
-                    context: context,
-                    builder: (context) => GenericStatusDialog(
-                      description: state.errorText,
-                      isErrorDialog: true,
-                    ),
-                  );
-                  break;
-                case WidgetStatus.success:
+          listenWhen: (p, c) => (p.status != c.status),
+          listener: (context, state) {
+            switch (state.status) {
+              case WidgetStatus.error:
+                showDialog<void>(
+                  context: context,
+                  builder: (context) => GenericStatusDialog(
+                    description: state.errorText,
+                    isErrorDialog: true,
+                  ),
+                );
+                break;
+              case WidgetStatus.success:
 
-                  // Comprobando si hay data en cache
-                  if ((LocalStorage.getEmail() ?? "").isNotEmpty) {
-                    // Actualizando data en cache
-                    LocalStorage.setCredentials(
-                      email: LocalStorage.getEmail(),
-                      password: state.password,
-                    );
-                  }
-
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => GenericStatusDialog(
-                      title: "Operación exitosa.",
-                      description: "Contraseña actualizada.",
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                    ),
+                // Comprobando si hay data en cache
+                if ((LocalStorage.getEmail() ?? "").isNotEmpty) {
+                  // Actualizando data en cache
+                  LocalStorage.setCredentials(
+                    email: LocalStorage.getEmail(),
+                    password: state.password,
                   );
-                  break;
-                default:
-                  break;
-              }
-            },
-            buildWhen: (p, c) => (p.status != c.status),
-            builder: (context, state) {
-              return Stack(
-                children: [
-                  const _View(),
-                  if (state.status == WidgetStatus.loading)
-                    Positioned.fill(
-                      child: Container(
-                        color: Colors.black.withOpacity(0.2),
-                        child: const Center(child: LoadingIndicator()),
-                      ),
+                }
+
+                showDialog<void>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => GenericStatusDialog(
+                    title: "Operación exitosa.",
+                    description: "Contraseña actualizada.",
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+                break;
+              default:
+                break;
+            }
+          },
+          buildWhen: (p, c) => (p.status != c.status),
+          builder: (context, state) {
+            return Stack(
+              children: [
+                const _View(),
+                if (state.status == WidgetStatus.loading)
+                  Positioned.fill(
+                    child: Container(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      child: const Center(child: LoadingIndicator()),
                     ),
-                ],
-              );
-            }),
+                  ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -129,82 +127,87 @@ class __ViewState extends State<_View> {
             child: Column(
               children: [
                 BlocBuilder<AuthenticationCubit, AuthenticationState>(
-                    buildWhen: (p, c) => (p.showPassword != c.showPassword),
-                    builder: (context, state) {
-                      return FormInput(
-                        labelText: "Contraseña Actual",
-                        hintText: "Ingresar contraseña actual",
-                        controller: _currentPasswordController,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: state.showPassword,
-                        validator: (value) =>
-                            Validators.loginPasswordValidation(value),
-                        suffixIcon: IconButton(
-                          onPressed: () => cubit.changePasswordVisibility(),
-                          icon: Icon(
-                            (state.showPassword)
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
-                            size: 24,
-                            color: const Color(0xFF9CA4AB),
-                          ),
+                  buildWhen: (p, c) => (p.showPassword != c.showPassword),
+                  builder: (context, state) {
+                    return FormInput(
+                      labelText: "Contraseña Actual",
+                      hintText: "Ingresar contraseña actual",
+                      controller: _currentPasswordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: state.showPassword,
+                      validator: (value) =>
+                          Validators.loginPasswordValidation(value),
+                      suffixIcon: IconButton(
+                        onPressed: () => cubit.changePasswordVisibility(),
+                        icon: Icon(
+                          (state.showPassword)
+                              ? Icons.visibility_off_rounded
+                              : Icons.visibility_rounded,
+                          size: 24,
+                          color: const Color(0xFF9CA4AB),
                         ),
-                      );
-                    }),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 24),
                 BlocBuilder<AuthenticationCubit, AuthenticationState>(
-                    buildWhen: (p, c) => (p.showPassword != c.showPassword),
-                    builder: (context, state) {
-                      return FormInput(
-                        labelText: "Nueva Contraseña",
-                        hintText: "Ingresar nueva contraseña",
-                        controller: _passwordController,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: state.showPassword,
-                        validator: (value) =>
-                            Validators.registerPasswordValidation(
-                                value,
-                                _passwordController.text,
-                                _cPasswordController.text),
-                        suffixIcon: IconButton(
-                          onPressed: () => cubit.changePasswordVisibility(),
-                          icon: Icon(
-                            (state.showPassword)
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
-                            size: 24,
-                            color: const Color(0xFF9CA4AB),
+                  buildWhen: (p, c) => (p.showPassword != c.showPassword),
+                  builder: (context, state) {
+                    return FormInput(
+                      labelText: "Nueva Contraseña",
+                      hintText: "Ingresar nueva contraseña",
+                      controller: _passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: state.showPassword,
+                      validator: (value) =>
+                          Validators.registerPasswordValidation(
+                            value,
+                            _passwordController.text,
+                            _cPasswordController.text,
                           ),
+                      suffixIcon: IconButton(
+                        onPressed: () => cubit.changePasswordVisibility(),
+                        icon: Icon(
+                          (state.showPassword)
+                              ? Icons.visibility_off_rounded
+                              : Icons.visibility_rounded,
+                          size: 24,
+                          color: const Color(0xFF9CA4AB),
                         ),
-                      );
-                    }),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 24),
                 BlocBuilder<AuthenticationCubit, AuthenticationState>(
-                    buildWhen: (p, c) => (p.showPassword != c.showPassword),
-                    builder: (context, state) {
-                      return FormInput(
-                        labelText: "Confirmar Contraseña",
-                        hintText: "Ingresar contraseña",
-                        controller: _cPasswordController,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: state.showPassword,
-                        validator: (value) =>
-                            Validators.registerPasswordValidation(
-                                value,
-                                _passwordController.text,
-                                _cPasswordController.text),
-                        suffixIcon: IconButton(
-                          onPressed: () => cubit.changePasswordVisibility(),
-                          icon: Icon(
-                            (state.showPassword)
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
-                            size: 24,
-                            color: const Color(0xFF9CA4AB),
+                  buildWhen: (p, c) => (p.showPassword != c.showPassword),
+                  builder: (context, state) {
+                    return FormInput(
+                      labelText: "Confirmar Contraseña",
+                      hintText: "Ingresar contraseña",
+                      controller: _cPasswordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: state.showPassword,
+                      validator: (value) =>
+                          Validators.registerPasswordValidation(
+                            value,
+                            _passwordController.text,
+                            _cPasswordController.text,
                           ),
+                      suffixIcon: IconButton(
+                        onPressed: () => cubit.changePasswordVisibility(),
+                        icon: Icon(
+                          (state.showPassword)
+                              ? Icons.visibility_off_rounded
+                              : Icons.visibility_rounded,
+                          size: 24,
+                          color: const Color(0xFF9CA4AB),
                         ),
-                      );
-                    }),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),

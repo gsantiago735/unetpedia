@@ -34,8 +34,8 @@ class AuthenticationProvider {
   }) async {
     try {
       final resp = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: data.email!,
-        password: data.password!,
+        email: data.email,
+        password: data.password,
       );
 
       return Right(resp);

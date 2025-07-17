@@ -201,19 +201,20 @@ class __ContentState extends State<_Content> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              GenericButton(
-                text: "Iniciar Sesión",
-                onTap: () {
-                  FocusScope.of(context).unfocus();
+             GenericButton(
+               text: "Iniciar Sesión",
+               onTap: () {
+                   FocusScope.of(context).unfocus();
 
-                  if (_formKey.currentState!.validate()) {
-                    //cubit.login(
-                    //  email: _emailController.text.trim(),
-                    //  password: _passwordController.text,
-                    //);
-                  }
+                   if (_formKey.currentState!.validate()) {
+                    final cubit = context.read<AuthenticationCubit>();
+                    cubit.login(
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text,
+                    );
+                   }
                 },
-              ),
+             ),
               const SizedBox(height: 28),
               const _RegisterText(),
             ],

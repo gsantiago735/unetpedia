@@ -36,25 +36,33 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   // ========================================================================
   // Basic Login
   // ========================================================================
+Future<void> login({required String email, required String password}) async {
+  if (state.genericStatus == WidgetStatus.loading) return;
 
-  //Future<void> login({required String email, required String password}) async {
-  //  if (state.status == WidgetStatus.loading) return;
-  //  emit(state.copyWith(status: WidgetStatus.loading));
-  //
-  //  final response =
-  //      await _authenticationProvider.logIn(email: email, password: password);
-  //
-  //  return response.fold((l) {
-  //    emit(state.copyWith(status: WidgetStatus.error, errorText: l.details));
-  //  }, (r) async {
-  //    emit(state.copyWith(
-  //      email: Wrapped.value(email),
-  //      password: Wrapped.value(password),
-  //      status: WidgetStatus.success,
-  //      loginResponseModel: Wrapped.value(r),
-  //    ));
-  //  });
-  //}
+  emit(state.copyWith(genericStatus: WidgetStatus.loading));
+
+  final response = await _authenticationProvider.logIn(
+    email: email,
+    password: password,
+  );
+
+  return response.fold(
+    (l) {
+      emit(state.copyWith(
+        genericStatus: WidgetStatus.error,
+        errorText: l.details,
+      ));
+    },
+    (r) async {
+      emit(state.copyWith(
+        email: Wrapped.value(email),
+        password: Wrapped.value(password),
+        genericStatus: WidgetStatus.success,
+      ));
+    },
+  );
+}
+
 
   // ========================================================================
   // Basic Register

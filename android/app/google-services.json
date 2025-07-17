@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "181953536666",
+    "project_id": "unetpedia-34c0c",
+    "storage_bucket": "unetpedia-34c0c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181953536666:android:9351bdcf8c57590780f523",
+        "android_client_info": {
+          "package_name": "com.dev735.unetpedia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDC84jghxBEveko2ygk4hoPi3C7RVe6xmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

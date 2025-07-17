@@ -36,7 +36,7 @@ class __ViewState extends State<_View> {
   @override
   void initState() {
     cubit = context.read<SubjectsCubit>();
-    cubit.getDocumentDetail();
+    //cubit.getDocumentDetail();
     super.initState();
   }
 
@@ -56,9 +56,7 @@ class __ViewState extends State<_View> {
           case WidgetStatus.error:
             return const Center(child: GenericErrorComponent());
           default:
-            return PDFView(
-              filePath: state.fileSelected!.file.path,
-            );
+            return PDFView(filePath: state.fileSelected!.file.path);
         }
       },
     );

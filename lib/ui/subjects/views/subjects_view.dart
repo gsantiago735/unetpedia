@@ -22,7 +22,7 @@ class _SubjectsViewState extends State<SubjectsView> {
   @override
   void initState() {
     cubit = context.read<GeneralCubit>();
-    cubit.getSubjects();
+    //cubit.getSubjects();
     super.initState();
   }
 
@@ -37,26 +37,28 @@ class _SubjectsViewState extends State<SubjectsView> {
           const SizedBox(height: 28),
           Expanded(
             child: BlocBuilder<GeneralCubit, GeneralState>(
-                buildWhen: (p, c) => (p.subjectsStatus != c.subjectsStatus),
-                builder: (context, state) {
-                  switch (state.subjectsStatus) {
-                    case WidgetStatus.loading:
-                      return const Center(child: LoadingIndicator());
-                    case WidgetStatus.error:
-                      return const Center(child: GenericErrorComponent());
-                    case WidgetStatus.success:
-                      return Column(
-                        children: [
-                          GenericTitle(
-                              title: state.categorySelected?.name ?? "N/A"),
-                          const SizedBox(height: 16),
-                          const _Content(),
-                        ],
-                      );
-                    default:
-                      return const SizedBox.shrink();
-                  }
-                }),
+              buildWhen: (p, c) => (p.subjectsStatus != c.subjectsStatus),
+              builder: (context, state) {
+                switch (state.subjectsStatus) {
+                  case WidgetStatus.loading:
+                    return const Center(child: LoadingIndicator());
+                  case WidgetStatus.error:
+                    return const Center(child: GenericErrorComponent());
+                  case WidgetStatus.success:
+                    return Column(
+                      children: [
+                        GenericTitle(
+                          title: state.categorySelected?.name ?? "N/A",
+                        ),
+                        const SizedBox(height: 16),
+                        const _Content(),
+                      ],
+                    );
+                  default:
+                    return const SizedBox.shrink();
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -83,9 +85,9 @@ class __ContentState extends State<_Content> {
     scrollController.addListener(() {
       double position = scrollController.position.pixels;
       double maxExtend = scrollController.position.maxScrollExtent;
-      if (position > maxExtend - 30) {
-        cubit.getSubjects();
-      }
+      // if (position > maxExtend - 30) {
+      //   cubit.getSubjects();
+      // }
     });
     super.initState();
   }
@@ -99,15 +101,16 @@ class __ContentState extends State<_Content> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GeneralCubit, GeneralState>(
-        buildWhen: (p, c) =>
-            (p.subjectsResponseModel != c.subjectsResponseModel ||
-                p.moreSubjectsStatus != c.moreSubjectsStatus),
-        builder: (context, state) {
-          List<Widget> children = [];
+      buildWhen: (p, c) =>
+          (p.subjectsResponseModel != c.subjectsResponseModel ||
+          p.moreSubjectsStatus != c.moreSubjectsStatus),
+      builder: (context, state) {
+        List<Widget> children = [];
 
-          for (SubjectResponseModel? subject
-              in state.subjectsResponseModel!.data!) {
-            children.add(GenericCard(
+        for (SubjectResponseModel? subject
+            in state.subjectsResponseModel!.data!) {
+          children.add(
+            GenericCard(
               title: subject?.name ?? "N/A",
               subtitle: subject?.countSubject?.countText ?? "N/A",
               asset: ConstantImages.redCard,
@@ -115,28 +118,30 @@ class __ContentState extends State<_Content> {
                 cubit.selectSubject(subject);
                 Navigator.pushNamed(context, SubjectDetailView.routeName);
               },
-            ));
-          }
-
-          if (state.moreSubjectsStatus == WidgetStatus.loading) {
-            children.add(const Center(child: LoadingIndicator()));
-          }
-
-          if (state.moreSubjectsStatus == WidgetStatus.error) {
-            children.add(const GenericErrorComponent());
-          }
-
-          return Expanded(
-            child: ListView.separated(
-              shrinkWrap: true,
-              controller: scrollController,
-              itemCount: children.length,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              itemBuilder: (context, index) => children[index],
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
             ),
           );
-        });
+        }
+
+        if (state.moreSubjectsStatus == WidgetStatus.loading) {
+          children.add(const Center(child: LoadingIndicator()));
+        }
+
+        if (state.moreSubjectsStatus == WidgetStatus.error) {
+          children.add(const GenericErrorComponent());
+        }
+
+        return Expanded(
+          child: ListView.separated(
+            shrinkWrap: true,
+            controller: scrollController,
+            itemCount: children.length,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            itemBuilder: (context, index) => children[index],
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -150,13 +155,14 @@ class _Header extends StatelessWidget {
     return AppBarLayout(
       child: SearchInput(
         controller: TextEditingController(
-            text: context.read<GeneralCubit>().state.subjectQuery),
+          text: context.read<GeneralCubit>().state.subjectQuery,
+        ),
         hintText: "Buscar Materia",
         prefixIcon: Icons.search_rounded,
         onChange: (value) {
           _debouncer.run(() {
             context.read<GeneralCubit>().setSubjectQuery(value);
-            context.read<GeneralCubit>().getSubjects();
+            //context.read<GeneralCubit>().getSubjects();
           });
         },
       ),

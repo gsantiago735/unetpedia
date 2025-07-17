@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+/*import 'package:dio/dio.dart';
 import 'package:dartz/dartz.dart';
 import 'package:unetpedia/api/api.dart';
 import 'package:unetpedia/models/generic/file_model.dart';
@@ -75,4 +75,4 @@ class DocumentsProvider {
       return Left(DataException(details: e.toString()));
     }
   }
-}
+}*/

@@ -15,8 +15,9 @@ class SubjectDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SubjectsCubit()
-        ..setSubject(context.read<GeneralCubit>().state.subjectSelected),
+      create: (context) =>
+          SubjectsCubit()
+            ..setSubject(context.read<GeneralCubit>().state.subjectSelected),
       child: Scaffold(
         appBar: const MainAppBar(title: "Detalles"),
         floatingActionButton: GenericIconButton(
@@ -44,7 +45,7 @@ class __ViewState extends State<_View> {
   @override
   void initState() {
     cubit = context.read<SubjectsCubit>();
-    cubit.getDocuments();
+    //cubit.getDocuments();
 
     super.initState();
   }
@@ -57,27 +58,26 @@ class __ViewState extends State<_View> {
         const SizedBox(height: 28),
         Expanded(
           child: BlocBuilder<SubjectsCubit, SubjectsState>(
-              buildWhen: (p, c) =>
-                  (p.getDocumentsStatus != c.getDocumentsStatus),
-              builder: (context, state) {
-                switch (state.getDocumentsStatus) {
-                  case WidgetStatus.loading:
-                    return const Center(child: LoadingIndicator());
-                  case WidgetStatus.error:
-                    return const Center(child: GenericErrorComponent());
-                  case WidgetStatus.success:
-                    return Column(
-                      children: [
-                        GenericTitle(
-                            title: state.subjectSelected?.name ?? "N/A"),
-                        const SizedBox(height: 16),
-                        const _RenderContent(),
-                      ],
-                    );
-                  default:
-                    return const SizedBox.shrink();
-                }
-              }),
+            buildWhen: (p, c) => (p.getDocumentsStatus != c.getDocumentsStatus),
+            builder: (context, state) {
+              switch (state.getDocumentsStatus) {
+                case WidgetStatus.loading:
+                  return const Center(child: LoadingIndicator());
+                case WidgetStatus.error:
+                  return const Center(child: GenericErrorComponent());
+                case WidgetStatus.success:
+                  return Column(
+                    children: [
+                      GenericTitle(title: state.subjectSelected?.name ?? "N/A"),
+                      const SizedBox(height: 16),
+                      const _RenderContent(),
+                    ],
+                  );
+                default:
+                  return const SizedBox.shrink();
+              }
+            },
+          ),
         ),
       ],
     );
@@ -103,9 +103,9 @@ class __RenderContentState extends State<_RenderContent> {
     scrollController.addListener(() {
       double position = scrollController.position.pixels;
       double maxExtend = scrollController.position.maxScrollExtent;
-      if (position > maxExtend - 30) {
-        cubit.getDocuments();
-      }
+      //if (position > maxExtend - 30) {
+      //  cubit.getDocuments();
+      //}
     });
     super.initState();
   }
@@ -119,13 +119,15 @@ class __RenderContentState extends State<_RenderContent> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubjectsCubit, SubjectsState>(
-        buildWhen: (p, c) => (p.documents != c.documents ||
-            p.getMoreDocsStatus != c.getMoreDocsStatus),
-        builder: (context, state) {
-          List<Widget> children = [];
+      buildWhen: (p, c) =>
+          (p.documents != c.documents ||
+          p.getMoreDocsStatus != c.getMoreDocsStatus),
+      builder: (context, state) {
+        List<Widget> children = [];
 
-          for (DocumentResponseModel? document in state.documents!.data!) {
-            children.add(SubjectCard(
+        for (DocumentResponseModel? document in state.documents!.data!) {
+          children.add(
+            SubjectCard(
               title: document?.name ?? "N/A",
               asset: ConstantImages.yellowCard,
               onPressed: () {
@@ -134,28 +136,30 @@ class __RenderContentState extends State<_RenderContent> {
               onWatch: () {
                 Navigator.pushNamed(context, SubjectDocumentView.routeName);
               },
-            ));
-          }
-
-          if (state.getMoreDocsStatus == WidgetStatus.loading) {
-            children.add(const Center(child: LoadingIndicator()));
-          }
-
-          if (state.getMoreDocsStatus == WidgetStatus.error) {
-            children.add(const GenericErrorComponent());
-          }
-
-          return Expanded(
-            child: ListView.separated(
-              shrinkWrap: true,
-              controller: scrollController,
-              itemCount: children.length,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              itemBuilder: (context, index) => children[index],
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
             ),
           );
-        });
+        }
+
+        if (state.getMoreDocsStatus == WidgetStatus.loading) {
+          children.add(const Center(child: LoadingIndicator()));
+        }
+
+        if (state.getMoreDocsStatus == WidgetStatus.error) {
+          children.add(const GenericErrorComponent());
+        }
+
+        return Expanded(
+          child: ListView.separated(
+            shrinkWrap: true,
+            controller: scrollController,
+            itemCount: children.length,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            itemBuilder: (context, index) => children[index],
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -170,12 +174,13 @@ class _Header extends StatelessWidget {
       child: SearchInput(
         hintText: "Buscar Material",
         controller: TextEditingController(
-            text: context.read<SubjectsCubit>().state.documentsQuery),
+          text: context.read<SubjectsCubit>().state.documentsQuery,
+        ),
         prefixIcon: Icons.search_rounded,
         onChange: (value) {
           _debouncer.run(() {
             context.read<SubjectsCubit>().setDocumentsQuery(value);
-            context.read<SubjectsCubit>().getDocuments();
+            //context.read<SubjectsCubit>().getDocuments();
           });
         },
       ),

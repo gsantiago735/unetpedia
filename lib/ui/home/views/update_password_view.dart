@@ -22,9 +22,9 @@ class UpdatePasswordView extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: const MainAppBar(title: "Cambiar Contraseña", isWhite: true),
         body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
-          listenWhen: (p, c) => (p.status != c.status),
+          listenWhen: (p, c) => (p.genericStatus != c.genericStatus),
           listener: (context, state) {
-            switch (state.status) {
+            switch (state.genericStatus) {
               case WidgetStatus.error:
                 showDialog<void>(
                   context: context,
@@ -62,12 +62,12 @@ class UpdatePasswordView extends StatelessWidget {
                 break;
             }
           },
-          buildWhen: (p, c) => (p.status != c.status),
+          buildWhen: (p, c) => (p.genericStatus != c.genericStatus),
           builder: (context, state) {
             return Stack(
               children: [
                 const _View(),
-                if (state.status == WidgetStatus.loading)
+                if (state.genericStatus == WidgetStatus.loading)
                   Positioned.fill(
                     child: Container(
                       color: Colors.black.withValues(alpha: 0.2),
@@ -219,10 +219,10 @@ class __ViewState extends State<_View> {
                 FocusScope.of(context).unfocus();
 
                 if (_formKey.currentState!.validate()) {
-                  cubit.changePassword(
-                    currentPassword: _currentPasswordController.text,
-                    newPassword: _passwordController.text,
-                  );
+                  // cubit.changePassword(
+                  //   currentPassword: _currentPasswordController.text,
+                  //   newPassword: _passwordController.text,
+                  // );
                 }
               },
             ),

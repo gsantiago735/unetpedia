@@ -1,66 +1,57 @@
-import 'package:unetpedia/models/generic/degrees_response_model.dart';
-
 class UserResponseModel {
-  final int? id;
+  final String? uid;
   final String? name;
   final String? lastName;
   final String? email;
-  final String? photo;
-  final int? roleId;
+  final String? photoUrl;
+  final String? role;
   final String? description;
-  final int? careerId;
-  final DegreesResponseModel? career;
-  final DegreesResponseModel? role;
+  final String? careerId;
+  final DateTime? registerDate;
+  final DateTime? lastSignIn;
+
+  final String? password;
 
   UserResponseModel({
-    this.id,
+    this.uid,
     this.name,
     this.lastName,
     this.email,
-    this.photo,
-    this.roleId,
+    this.photoUrl,
+    this.role,
     this.description,
     this.careerId,
-    this.career,
-    this.role,
+    this.registerDate,
+    this.lastSignIn,
+    this.password,
   });
+
+  String get fullName => "$name $lastName";
 
   factory UserResponseModel.fromJson(Map<String, dynamic> json) =>
       UserResponseModel(
-        id: json["id"],
-        name: json["name"],
-        lastName: json["lastname"],
-        email: json["email"],
-        photo: json["photo"],
-        roleId: json["role_id"],
-        description: json["description"],
-        careerId: json["career_id"],
-        career: (json["career"] == null)
-            ? null
-            : DegreesResponseModel.fromJson(json["career"]),
-        role: (json["role"] == null)
-            ? null
-            : DegreesResponseModel.fromJson(json["role"]),
+        uid: json['uid'],
+        name: json['name'],
+        lastName: json['lastName'],
+        email: json['email'],
+        photoUrl: json['photoUrl'],
+        role: json['role'],
+        description: json['description'],
+        careerId: json['careerId'],
+        registerDate: json['registerDate'],
+        lastSignIn: json['lastSignIn'],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "lastName": lastName,
-        "email": email,
-        "photo": photo,
-        "role_id": roleId,
-        "description": description,
-        "career_id": careerId,
-        "career": career?.toJson(),
-        "role": role?.toJson(),
-      };
-
-  String? get fullName {
-    if (name != null && lastName != null) {
-      return "$name $lastName";
-    } else {
-      return null;
-    }
-  }
+    "uid": uid,
+    "name": name,
+    "lastName": lastName,
+    "email": email,
+    "photoUrl": photoUrl,
+    "role": role,
+    "description": description,
+    "careerId": careerId,
+    "registerDate": registerDate,
+    "lastSignIn": lastSignIn,
+  };
 }

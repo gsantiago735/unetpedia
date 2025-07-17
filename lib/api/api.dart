@@ -1,9 +1,9 @@
-import 'dart:developer';
-import 'package:dio/dio.dart';
-import 'package:unetpedia/utils/local_storage.dart';
-import 'package:unetpedia/core/constants/constant_api.dart';
+// import 'dart:developer';
+// import 'package:dio/dio.dart';
+// import 'package:unetpedia/utils/local_storage.dart';
+// import 'package:unetpedia/core/constants/constant_api.dart';
 
-class Api {
+/*class Api {
   final dio = createDio();
   final noBearer = noBearerDio();
   final dioFormData = createDioFormData();
@@ -65,4 +65,4 @@ class AppInterceptors extends Interceptor {
     log(err.response.toString());
     handler.next(err);
   }
-}
+}*/

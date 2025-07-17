@@ -14,10 +14,7 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainAppBar(
-        title: "Ajustes",
-        isWhite: true,
-      ),
+      appBar: const MainAppBar(title: "Ajustes", isWhite: true),
       body: Column(
         children: [
           const Padding(
@@ -66,7 +63,7 @@ class _UserInfoComponent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Divider(thickness: 1, color: Color(0xFFF1F5F9), height: 30),
-        BlocBuilder<GeneralCubit, GeneralState>(
+        /*BlocBuilder<GeneralCubit, GeneralState>(
             buildWhen: (p, c) => (p.userResponseModel != c.userResponseModel),
             builder: (context, state) {
               return Row(
@@ -110,7 +107,7 @@ class _UserInfoComponent extends StatelessWidget {
                   )
                 ],
               );
-            }),
+            }),*/
         const Divider(thickness: 1, color: Color(0xFFF1F5F9), height: 30),
       ],
     );
@@ -142,15 +139,9 @@ class _ListTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            width: 2,
-            color: const Color(0xFFD9D9D9),
-          ),
+          border: Border.all(width: 2, color: const Color(0xFFD9D9D9)),
         ),
-        child: Icon(
-          icon,
-          color: ConstantColors.cff141718,
-        ),
+        child: Icon(icon, color: ConstantColors.cff141718),
       ),
       trailing: const Icon(
         Icons.arrow_forward_ios_rounded,

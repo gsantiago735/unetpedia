@@ -23,7 +23,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     _cubit = context.read<GeneralCubit>();
-    _cubit.getUser();
+    //_cubit.getUser();
     super.initState();
   }
 
@@ -74,7 +74,9 @@ class _HomeViewState extends State<HomeView> {
                           onPressed: () {
                             _cubit.setCategoryQuery("");
                             Navigator.pushNamed(
-                                context, DepartmentsView.routeName);
+                              context,
+                              DepartmentsView.routeName,
+                            );
                           },
                         ),
                         const SizedBox(height: 20),
@@ -95,7 +97,9 @@ class _HomeViewState extends State<HomeView> {
                           asset: ConstantImages.blueCard,
                           onPressed: () {
                             Navigator.pushNamed(
-                                context, QualificationView.routeName);
+                              context,
+                              QualificationView.routeName,
+                            );
                           },
                         ),
                       ],
@@ -103,7 +107,7 @@ class _HomeViewState extends State<HomeView> {
                 }
               },
             ),
-          )
+          ),
         ],
       ),
     );
@@ -120,20 +124,21 @@ class _Header extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BlocBuilder<GeneralCubit, GeneralState>(
-              buildWhen: (p, c) => (p.userResponseModel != c.userResponseModel),
-              builder: (context, state) {
-                return Text(
-                  ((state.userResponseModel?.user?.name ?? "").isNotEmpty)
-                      ? "Hola ${state.userResponseModel?.user?.name}."
-                      : "Hola ...",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                );
-              }),
+          // BlocBuilder<GeneralCubit, GeneralState>(
+          //   buildWhen: (p, c) => (p.userResponseModel != c.userResponseModel),
+          //   builder: (context, state) {
+          //     return Text(
+          //       ((state.userResponseModel?.user?.name ?? "").isNotEmpty)
+          //           ? "Hola ${state.userResponseModel?.user?.name}."
+          //           : "Hola ...",
+          //       style: const TextStyle(
+          //         fontSize: 18,
+          //         color: Colors.white,
+          //         fontWeight: FontWeight.w500,
+          //       ),
+          //     );
+          //   },
+          // ),
           const SizedBox(height: 2),
           const Text(
             "Encuentra el contenido que quieres aprender.",

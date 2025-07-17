@@ -5,14 +5,14 @@ class GenericButton extends StatelessWidget {
   final String text;
   final Color color;
   final EdgeInsets? padding;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const GenericButton({
     super.key,
     required this.text,
     this.padding,
     this.color = ConstantColors.cff141718,
-    required this.onTap,
+    this.onTap,
   });
 
   @override
@@ -29,7 +29,9 @@ class GenericButton extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(24)),
             ),
           ),
-          backgroundColor: WidgetStatePropertyAll(color),
+          backgroundColor: (onTap != null)
+              ? WidgetStatePropertyAll(color)
+              : null,
         ),
         child: Text(
           text,

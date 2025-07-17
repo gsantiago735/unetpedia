@@ -21,9 +21,9 @@ class _SelectDegreeModalState extends State<SelectDegreeModal> {
   void initState() {
     cubit = context.read<GeneralCubit>();
 
-    if ((cubit.state.degrees?.data ?? []).isEmpty) {
-      cubit.getDegrees();
-    }
+    //if ((cubit.state.degrees?.data ?? []).isEmpty) {
+    //  cubit.getDegrees();
+    //}
 
     super.initState();
   }
@@ -46,68 +46,69 @@ class _SelectDegreeModalState extends State<SelectDegreeModal> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 60,
-                height: 6,
-                decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: 60,
+              height: 6,
+              decoration: const BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
             ),
-            const SizedBox(height: 24),
-            const Text(
-              "Seleccionar Carrera: ",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 12),
-            BlocBuilder<GeneralCubit, GeneralState>(
-                buildWhen: (p, c) => (p.degreesStatus != c.degreesStatus),
-                builder: (context, state) {
-                  switch (state.degreesStatus) {
-                    case WidgetStatus.error:
-                      return const Expanded(
-                          child: Center(
-                        child: GenericErrorComponent(),
-                      ));
-                    case WidgetStatus.loading:
-                      return const Expanded(
-                          child: Center(child: LoadingIndicator()));
-                    case WidgetStatus.success:
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: (state.degrees?.data ?? []).length,
-                          itemBuilder: (context, index) {
-                            final degree = state.degrees?.data?[index];
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            "Seleccionar Carrera: ",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 12),
+          BlocBuilder<GeneralCubit, GeneralState>(
+            buildWhen: (p, c) => (p.degreesStatus != c.degreesStatus),
+            builder: (context, state) {
+              switch (state.degreesStatus) {
+                case WidgetStatus.error:
+                  return const Expanded(
+                    child: Center(child: GenericErrorComponent()),
+                  );
+                case WidgetStatus.loading:
+                  return const Expanded(
+                    child: Center(child: LoadingIndicator()),
+                  );
+                case WidgetStatus.success:
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: (state.degrees?.data ?? []).length,
+                      itemBuilder: (context, index) {
+                        final degree = state.degrees?.data?[index];
 
-                            return _DegreeTile(
-                              title: degree?.name ?? "N/A",
-                              onPresed: () {
-                                if (degree != null) {
-                                  widget.onDegreeSelected(
-                                      state.degrees!.data![index]);
-                                }
-                                Navigator.pop(context);
-                              },
-                            );
+                        return _DegreeTile(
+                          title: degree?.name ?? "N/A",
+                          onPresed: () {
+                            if (degree != null) {
+                              widget.onDegreeSelected(
+                                state.degrees!.data![index],
+                              );
+                            }
+                            Navigator.pop(context);
                           },
-                        ),
-                      );
-                    default:
-                      return const SizedBox.shrink();
-                  }
-                }),
-          ],
-        ));
+                        );
+                      },
+                    ),
+                  );
+                default:
+                  return const SizedBox.shrink();
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
 

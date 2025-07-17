@@ -13,7 +13,7 @@ part 'subjects_state.dart';
 class SubjectsCubit extends Cubit<SubjectsState> {
   SubjectsCubit() : super(const SubjectsState());
 
-  final _documentsProvider = DocumentsProvider();
+  //final _documentsProvider = DocumentsProvider();
 
   void setSubject(SubjectResponseModel? value) {
     emit(state.copyWith(subjectSelected: Wrapped.value(value)));
@@ -36,7 +36,7 @@ class SubjectsCubit extends Cubit<SubjectsState> {
   // Get Documents
   // ========================================================================
 
-  Future<void> getDocuments() async {
+  /*Future<void> getDocuments() async {
     if (state.getDocumentsStatus == WidgetStatus.loading ||
         state.getMoreDocsStatus == WidgetStatus.loading) {
       return;
@@ -96,9 +96,9 @@ class SubjectsCubit extends Cubit<SubjectsState> {
         );
       },
     );
-  }
+  }*/
 
-  Future<void> getDocumentDetail() async {
+  /*Future<void> getDocumentDetail() async {
     if (state.getDocumentsStatus == WidgetStatus.loading) return;
     emit(state.copyWith(getDocumentsStatus: WidgetStatus.loading));
 
@@ -123,13 +123,13 @@ class SubjectsCubit extends Cubit<SubjectsState> {
         await _download();
       },
     );
-  }
+  }*/
 
   // ========================================================================
   // Upload Documents
   // ========================================================================
 
-  Future<void> createDocument({required int category}) async {
+  /*Future<void> createDocument({required int category}) async {
     if (state.uploadStatus == WidgetStatus.loading) return;
     emit(state.copyWith(uploadStatus: WidgetStatus.loading));
 
@@ -152,9 +152,9 @@ class SubjectsCubit extends Cubit<SubjectsState> {
         await _uploadDocument(r.presignedUrl);
       },
     );
-  }
+  }*/
 
-  Future<void> _uploadDocument(String? presigned) async {
+  /*Future<void> _uploadDocument(String? presigned) async {
     final response = await _documentsProvider.uploadDocument(
       presignedUrl: presigned!,
       file: state.fileSelected!,
@@ -173,7 +173,7 @@ class SubjectsCubit extends Cubit<SubjectsState> {
         emit(state.copyWith(uploadStatus: WidgetStatus.success));
       },
     );
-  }
+  }*/
 
   // Download
 

@@ -22,9 +22,9 @@ class LoginView extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: ConstantColors.cff141718,
         body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
-          listenWhen: (p, c) => (p.status != c.status),
+          listenWhen: (p, c) => (p.genericStatus != c.genericStatus),
           listener: (context, state) async {
-            switch (state.status) {
+            switch (state.genericStatus) {
               case WidgetStatus.error:
                 showDialog<void>(
                   context: context,
@@ -35,32 +35,35 @@ class LoginView extends StatelessWidget {
                 );
                 break;
               case WidgetStatus.success:
-                if (state.loginResponseModel?.accessToken != null) {
-                  // Guardando data en cache
-                  await LocalStorage.setSession(
-                    userId: state.loginResponseModel?.userId.toString(),
-                    accessToken: state.loginResponseModel?.accessToken,
-                  );
+                Navigator.pushReplacementNamed(context, HomeView.routeName);
 
-                  // Guardando credenciales de usuario si es necesario
-                  if (state.rememberMe) {
-                    await LocalStorage.setCredentials(
-                      email: state.email,
-                      password: state.password,
-                    );
-                  } else {
-                    await LocalStorage.deleteCredentials();
-                  }
-
-                  // ignore: use_build_context_synchronously
-                  Navigator.pushReplacementNamed(context, HomeView.routeName);
-                }
+                //if (state.loginResponseModel?.accessToken != null) {
+                //  // Guardando data en cache
+                //  await LocalStorage.setSession(
+                //    userId: state.loginResponseModel?.userId.toString(),
+                //    accessToken: state.loginResponseModel?.accessToken,
+                //  );
+                //
+                //  // Guardando credenciales de usuario si es necesario
+                //  if (state.rememberMe) {
+                //    await LocalStorage.setCredentials(
+                //      email: state.email,
+                //      password: state.password,
+                //    );
+                //  } else {
+                //    await LocalStorage.deleteCredentials();
+                //  }
+                //
+                //  // ignore: use_build_context_synchronously
+                //  Navigator.pushReplacementNamed(context, HomeView.routeName);
+                //}
                 break;
+
               default:
                 break;
             }
           },
-          buildWhen: (p, c) => (p.status != c.status),
+          buildWhen: (p, c) => (p.genericStatus != c.genericStatus),
           builder: (context, state) {
             return Stack(
               children: [
@@ -100,7 +103,7 @@ class LoginView extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (state.status == WidgetStatus.loading)
+                if (state.genericStatus == WidgetStatus.loading)
                   Positioned.fill(
                     child: Container(
                       color: Colors.black.withValues(alpha: 0.2),
@@ -198,19 +201,20 @@ class __ContentState extends State<_Content> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              GenericButton(
-                text: "Iniciar Sesión",
-                onTap: () {
-                  FocusScope.of(context).unfocus();
+             GenericButton(
+               text: "Iniciar Sesión",
+               onTap: () {
+                   FocusScope.of(context).unfocus();
 
-                  if (_formKey.currentState!.validate()) {
+                   if (_formKey.currentState!.validate()) {
+                    final cubit = context.read<AuthenticationCubit>();
                     cubit.login(
-                      email: _emailController.text.trim(),
-                      password: _passwordController.text,
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text,
                     );
-                  }
+                   }
                 },
-              ),
+             ),
               const SizedBox(height: 28),
               const _RegisterText(),
             ],

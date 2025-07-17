@@ -11,9 +11,9 @@ class NavigatorUtils {
   }) async {
     final generalCubit = context.read<GeneralCubit>();
 
-    if (needsLogOut) {
-      await generalCubit.logOut();
-    }
+    //if (needsLogOut) {
+    //  await generalCubit.logOut();
+    //}
 
     generalCubit.clean();
 

@@ -6,7 +6,6 @@ class GeneralState extends Equatable {
     this.degrees,
     this.degreesStatus = WidgetStatus.initial,
     this.getUserStatus = WidgetStatus.initial,
-    this.userResponseModel,
     this.logOutStatus = WidgetStatus.initial,
     this.categoryStatus = WidgetStatus.initial,
     this.categoriesResponseModel,
@@ -28,7 +27,6 @@ class GeneralState extends Equatable {
 
   // Authentication
   final WidgetStatus getUserStatus;
-  final RegisterResponseModel? userResponseModel;
   final WidgetStatus logOutStatus;
 
   // Categories (Departaments)
@@ -46,29 +44,27 @@ class GeneralState extends Equatable {
 
   @override
   List<Object?> get props => [
-        errorText,
-        degrees,
-        degreesStatus,
-        getUserStatus,
-        userResponseModel,
-        logOutStatus,
-        categoryStatus,
-        categoriesResponseModel,
-        subjectsStatus,
-        subjectsResponseModel,
-        categorySelected,
-        moreSubjectsStatus,
-        subjectSelected,
-        categoryQuery,
-        subjectQuery,
-      ];
+    errorText,
+    degrees,
+    degreesStatus,
+    getUserStatus,
+    logOutStatus,
+    categoryStatus,
+    categoriesResponseModel,
+    subjectsStatus,
+    subjectsResponseModel,
+    categorySelected,
+    moreSubjectsStatus,
+    subjectSelected,
+    categoryQuery,
+    subjectQuery,
+  ];
 
   GeneralState copyWith({
     String? errorText,
     Wrapped<DegreesResponseModel?>? degrees,
     WidgetStatus? degreesStatus,
     WidgetStatus? getUserStatus,
-    Wrapped<RegisterResponseModel?>? userResponseModel,
     WidgetStatus? logOutStatus,
     WidgetStatus? categoryStatus,
     Wrapped<CategoriesResponseModel?>? categoriesResponseModel,
@@ -85,9 +81,6 @@ class GeneralState extends Equatable {
       degrees: degrees != null ? degrees.value : this.degrees,
       degreesStatus: degreesStatus ?? this.degreesStatus,
       getUserStatus: getUserStatus ?? this.getUserStatus,
-      userResponseModel: userResponseModel != null
-          ? userResponseModel.value
-          : this.userResponseModel,
       logOutStatus: logOutStatus ?? this.logOutStatus,
       categoryStatus: categoryStatus ?? this.categoryStatus,
       categoriesResponseModel: categoriesResponseModel != null

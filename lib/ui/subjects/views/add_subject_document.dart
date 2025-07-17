@@ -51,7 +51,7 @@ class AddSubjectDocumentView extends StatelessWidget {
                     title: "Operación exitosa.",
                     description: "Archivo subido.",
                     onTap: () {
-                      context.read<GeneralCubit>().getSubjects();
+                      //context.read<GeneralCubit>().getSubjects();
                       Navigator.pop(context);
                       Navigator.pop(context);
                       Navigator.pop(context);
@@ -174,9 +174,9 @@ class __ViewState extends State<_View> {
                         state.fileSelected != null) {
                       final genericCubit = context.read<GeneralCubit>();
 
-                      cubit.createDocument(
-                        category: genericCubit.state.categorySelected!.id!,
-                      );
+                      // cubit.createDocument(
+                      //   category: genericCubit.state.categorySelected!.id!,
+                      // );
                     }
                   },
                 ),

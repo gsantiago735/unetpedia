@@ -6,8 +6,12 @@ import 'package:unetpedia/widgets/generic_error.dart';
 import 'package:unetpedia/ui/subjects/cubit/cubit.dart';
 import 'package:unetpedia/widgets/loading_indicator.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
+import 'package:unetpedia/models/subject/document_model.dart';
 import 'package:unetpedia/core/constants/constants_images.dart';
 import 'package:unetpedia/ui/subjects/widgets/subject_card.dart';
+import 'package:unetpedia/widgets/dialogs/generic_status_dialog.dart';
+import 'package:unetpedia/ui/subjects/views/subject_document_view.dart';
+import 'package:unetpedia/widgets/dialogs/generic_information_dialog.dart';
 
 // Listado de documentos de un usuario
 class MyDocumentsView extends StatelessWidget {
@@ -22,9 +26,9 @@ class MyDocumentsView extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: const MainAppBar(title: "Mis Documentos", isWhite: true),
         body: BlocConsumer<SubjectsCubit, SubjectsState>(
-          //listenWhen: (p, c) => (p.genericStatus != c.genericStatus),
+          listenWhen: (p, c) => (p.deleteStatus != c.deleteStatus),
           listener: (context, state) {
-            /*switch (state.genericStatus) {
+            switch (state.deleteStatus) {
               case WidgetStatus.loading:
                 showDialog<void>(
                   context: context,
@@ -50,8 +54,6 @@ class MyDocumentsView extends StatelessWidget {
 
               case WidgetStatus.success:
                 Navigator.pop(context);
-                context.read<GeneralCubit>().getUser();
-
                 showDialog<void>(
                   context: context,
                   builder: (context) => GenericStatusDialog(),
@@ -60,7 +62,7 @@ class MyDocumentsView extends StatelessWidget {
 
               default:
                 break;
-            }*/
+            }
           },
           builder: (context, state) {
             return const _View();
@@ -89,10 +91,30 @@ class _ViewState extends State<_View> {
     super.initState();
   }
 
+  void _onDeleteFile(DocumentModel? value) {
+    if ((value?.id ?? "").isEmpty) return;
+
+    showDialog<void>(
+      context: context,
+      builder: (ctx) {
+        return GenericInformationDialog(
+          title: '¿Estás seguro de querer eliminar este archivo?',
+          description: "El archivo se eliminará permanentemente.",
+          onTwoButton: () {
+            Navigator.pop(ctx);
+            _cubit.deleteDocument(value!);
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubjectsCubit, SubjectsState>(
-      buildWhen: (p, c) => (p.getDocumentsStatus != c.getDocumentsStatus),
+      buildWhen: (p, c) =>
+          (p.getDocumentsStatus != c.getDocumentsStatus ||
+          p.documents != c.documents),
       builder: (context, state) {
         switch (state.getDocumentsStatus) {
           case WidgetStatus.loading:
@@ -127,17 +149,19 @@ class _ViewState extends State<_View> {
                               title: state.documents?[index].name ?? "N/A",
                               asset: ConstantImages.yellowCard,
                               onPressed: () {
-                                //Navigator.pushNamed(
-                                //  context,
-                                //  SubjectDocumentView.routeName,
-                                //);
+                                Navigator.push<void>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return SubjectDocumentView(
+                                        document: state.documents?[index],
+                                      );
+                                    },
+                                  ),
+                                );
                               },
-                              onWatch: () {
-                                //Navigator.pushNamed(
-                                //  context,
-                                //  SubjectDocumentView.routeName,
-                                //);
-                              },
+                              onDelete: () =>
+                                  _onDeleteFile(state.documents?[index]),
                             );
                           },
                           separatorBuilder: (context, index) =>

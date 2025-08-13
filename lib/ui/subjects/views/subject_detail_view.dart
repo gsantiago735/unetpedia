@@ -115,7 +115,7 @@ class __ViewState extends State<_View> {
                                         ),
                                       );
                                     },
-                                    onWatch: () {
+                                    onDelete: () {
                                       //Navigator.pushNamed(
                                       //  context,
                                       //  SubjectDocumentView.routeName,

@@ -96,7 +96,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         await _firestoreProvider.createUserDocument(data, r.user!.uid);
 
         // 2. Subiendo imagen de perfil
-        final url = await _firestoreProvider.uploadFile(
+        final url = await _firestoreProvider.uploadStorageFile(
           storagePath: StoragePath.profile,
           path: "${r.user!.uid}/${DateTime.now().toString()}.jpg",
           file: state.photoSelected!.file,
@@ -129,7 +129,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
       // 1. Subir nueva imagen si se seleccionó
       if (state.photoSelected != null) {
-        photoUrl = await _firestoreProvider.uploadFile(
+        photoUrl = await _firestoreProvider.uploadStorageFile(
           storagePath: StoragePath.profile,
           path: "${user.uid}/${DateTime.now().toString()}.jpg",
           file: state.photoSelected!.file,

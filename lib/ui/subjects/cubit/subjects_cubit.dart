@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unetpedia/utils/generic_utils.dart';
 import 'package:unetpedia/models/generic/wrapped.dart';
 import 'package:unetpedia/models/generic/file_model.dart';
@@ -163,10 +164,9 @@ class SubjectsCubit extends Cubit<SubjectsState> {
     }
 
     // 1. Subiendo el archivo seleccionado
-    final fileUrl = await _firestoreProvider.uploadFile(
+    final fileUrl = await _firestoreProvider.uploadStorageFile(
       storagePath: StoragePath.files,
-      path:
-          "$userId/${state.fileSelected?.name}${state.fileSelected!.getExtension}",
+      path: "$userId/${state.fileSelected?.name}",
       file: state.fileSelected!.file,
     );
 
@@ -188,9 +188,42 @@ class SubjectsCubit extends Cubit<SubjectsState> {
       (l) {
         emit(state.copyWith(uploadStatus: WidgetStatus.error, exception: l));
       },
-      (r) async {
-        //await _uploadDocument(r.presignedUrl);
+      (r) {
         emit(state.copyWith(uploadStatus: WidgetStatus.success));
+      },
+    );
+  }
+
+  // ========================================================================
+  // Delete Documents
+  // ========================================================================
+
+  // Elimina un archivo en el storage y elimina el documento en la base de datos
+  Future<void> deleteDocument(DocumentModel document) async {
+    if (state.deleteStatus == WidgetStatus.loading) return;
+    emit(state.copyWith(deleteStatus: WidgetStatus.loading));
+
+    final resp = await _firestoreProvider.deleteFileDocument(
+      userId: FirebaseAuth.instance.currentUser!.uid,
+      document: document,
+    );
+
+    return resp.fold(
+      (l) {
+        emit(state.copyWith(deleteStatus: WidgetStatus.error, exception: l));
+      },
+      (r) {
+        // Creando una nueva lista
+        final newList = [...state.documents!];
+        // Eliminando localmente el item
+        newList.removeWhere((e) => (e.id == document.id));
+
+        emit(
+          state.copyWith(
+            deleteStatus: WidgetStatus.success,
+            documents: Wrapped.value(newList),
+          ),
+        );
       },
     );
   }

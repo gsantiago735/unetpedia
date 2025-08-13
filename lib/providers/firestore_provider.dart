@@ -20,7 +20,7 @@ class FirestoreProvider {
   final String _filesCollection = "files";
 
   // ========================================================================
-  //  Users
+  //  User Collection
   // ========================================================================
 
   Future<void> createUserDocument(RegisterRequestModel user, String uid) async {
@@ -55,35 +55,6 @@ class FirestoreProvider {
     await ref.update({"lastSignIn": DateTime.now()});
   }
 
-  /// This function returns the url of the file uploaded
-  Future<String> uploadFile({
-    required StoragePath storagePath,
-    required String path,
-    required File file,
-  }) async {
-    late String url;
-
-    try {
-      // Creating path -> storagePath/path/image.jpg
-      final Reference reference = _storage
-          .ref()
-          .child(storagePath.toPath())
-          .child(path);
-
-      // Uploading Asset
-      final UploadTask imageToUpload = reference.putFile(file);
-
-      // Getting download url
-      await imageToUpload.then(
-        (task) async => url = await task.ref.getDownloadURL(),
-      );
-
-      return url;
-    } catch (e) {
-      return "Error ${e.toString()}";
-    }
-  }
-
   // Get user informacion
   Future<Either<DataException, UserResponseModel>> getUser(String uid) async {
     try {
@@ -116,7 +87,7 @@ class FirestoreProvider {
   }
 
   // ========================================================================
-  //  Careers
+  //  Career Collection
   // ========================================================================
 
   // Get active careers by name
@@ -139,7 +110,7 @@ class FirestoreProvider {
   }
 
   // ========================================================================
-  //  Departments
+  //  Department Collection
   // ========================================================================
 
   // Get departments by name
@@ -163,7 +134,7 @@ class FirestoreProvider {
   }
 
   // ========================================================================
-  //  Subjects
+  //  Subject Collection
   // ========================================================================
 
   // Get subjects by name
@@ -191,7 +162,7 @@ class FirestoreProvider {
   }
 
   // ========================================================================
-  //  Files
+  //  File Collection
   // ========================================================================
 
   // Creates a file document
@@ -212,7 +183,7 @@ class FirestoreProvider {
           .collection(_subjectsCollection)
           .doc(subjectId);
 
-      // Implementando transaccion para garantiar todas las operaciones
+      // Implementando transaccion para garantizar todas las operaciones
       // 1. Leer el documento de la materia
       // 2. Crear el documento en la coleccion files
       // 3. Incrementar el contador de numero de archivos subidos en la materia
@@ -231,6 +202,42 @@ class FirestoreProvider {
 
         // 3. Actualiza el contador de documentos de la materia
         transaction.update(subjectRef, {'file_count': FieldValue.increment(1)});
+      });
+
+      return Right("ok");
+    } on FirebaseException catch (e) {
+      return Left(DataException(details: e.message));
+    } catch (e) {
+      return Left(DataException(details: e.toString()));
+    }
+  }
+
+  // Deletes a file document
+  Future<Either<DataException, String>> deleteFileDocument({
+    required String userId,
+    required DocumentModel document,
+  }) async {
+    try {
+      final fileRef = _db.collection(_filesCollection).doc(document.id);
+
+      // Eliminando el archivo del storage
+      await _deleteStorageFile(
+        storagePath: StoragePath.files,
+        uid: userId,
+        fileName: document.name!,
+      );
+
+      // Implementando transaccion para garantizar todas las operaciones
+      // 1. Elimina el documento en la coleccion files
+      // 2. Decrementa el contador de numero de archivos subidos en la materia
+      await _db.runTransaction((transaction) async {
+        // 1. Eliminando el documento
+        transaction.delete(fileRef);
+
+        // 2. Actualizando el contador de documentos de la materia
+        transaction.update(document.subject!, {
+          'file_count': FieldValue.increment(-1),
+        });
       });
 
       return Right("ok");
@@ -291,6 +298,60 @@ class FirestoreProvider {
       );
     } on FirebaseException catch (e) {
       return Left(DataException(details: e.message));
+    } catch (e) {
+      return Left(DataException(details: e.toString()));
+    }
+  }
+
+  // ========================================================================
+  //  Firebase Storage Files
+  // ========================================================================
+
+  /// This function returns the url of the file uploaded
+  Future<String> uploadStorageFile({
+    required StoragePath storagePath,
+    required String path,
+    required File file,
+  }) async {
+    late String url;
+
+    try {
+      // Creating path -> storagePath/path/image.jpg
+      final Reference reference = _storage
+          .ref()
+          .child(storagePath.toPath())
+          .child(path);
+
+      // Uploading Asset
+      final UploadTask imageToUpload = reference.putFile(file);
+
+      // Getting download url
+      await imageToUpload.then(
+        (task) async => url = await task.ref.getDownloadURL(),
+      );
+
+      return url;
+    } catch (e) {
+      return "Error ${e.toString()}";
+    }
+  }
+
+  Future<Either<DataException, String>> _deleteStorageFile({
+    required StoragePath storagePath,
+    required String uid,
+    required String fileName,
+  }) async {
+    try {
+      final Reference reference = _storage
+          .ref()
+          .child(storagePath.toPath())
+          .child(uid)
+          .child(fileName);
+
+      // Deleting Asset
+      await reference.delete();
+
+      return Right("ok");
     } catch (e) {
       return Left(DataException(details: e.toString()));
     }

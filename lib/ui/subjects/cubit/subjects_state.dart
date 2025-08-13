@@ -10,6 +10,7 @@ class SubjectsState extends Equatable {
     this.fileSelected,
     this.documentSelected,
     this.downloadPercent,
+    this.deleteStatus = WidgetStatus.initial,
   });
 
   // General
@@ -21,6 +22,9 @@ class SubjectsState extends Equatable {
   final List<DocumentModel>? documents;
   final WidgetStatus getDocumentsStatus;
   final DocumentModel? documentSelected;
+
+  // Delete Document
+  final WidgetStatus deleteStatus;
 
   // Upload Document
   final WidgetStatus uploadStatus;
@@ -36,6 +40,7 @@ class SubjectsState extends Equatable {
     fileSelected,
     documentSelected,
     downloadPercent,
+    deleteStatus,
   ];
 
   SubjectsState copyWith({
@@ -47,6 +52,7 @@ class SubjectsState extends Equatable {
     Wrapped<FileModel?>? fileSelected,
     Wrapped<DocumentModel?>? documentSelected,
     Wrapped<double?>? downloadPercent,
+    WidgetStatus? deleteStatus,
   }) {
     return SubjectsState(
       exception: exception ?? this.exception,
@@ -63,6 +69,7 @@ class SubjectsState extends Equatable {
       downloadPercent: downloadPercent != null
           ? downloadPercent.value
           : this.downloadPercent,
+      deleteStatus: deleteStatus ?? this.deleteStatus,
     );
   }
 }

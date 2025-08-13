@@ -8,15 +8,13 @@ class SubjectCard extends StatelessWidget {
     required this.title,
     required this.asset,
     required this.onPressed,
-    this.onDownload,
-    this.onWatch,
+    this.onDelete,
   });
 
   final String title;
   final String asset;
   final VoidCallback onPressed;
-  final VoidCallback? onDownload;
-  final VoidCallback? onWatch;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -70,19 +68,24 @@ class SubjectCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Row(
-                children: [
-                  GenericIconButton(
-                    icon: Icons.download_rounded,
-                    onPressed: () {},
-                  ),
-                  //const SizedBox(width: 12),
-                  GenericIconButton(
-                    icon: Icons.visibility_rounded,
-                    onPressed: () {},
-                  ),
-                ],
-              )
+              if (onDelete != null)
+                GenericIconButton(
+                  icon: Icons.delete_rounded,
+                  onPressed: onDelete,
+                ),
+              // Row(
+              //   children: [
+              //     //GenericIconButton(
+              //     //  icon: Icons.download_rounded,
+              //     //  onPressed: () {},
+              //     //),
+              //     //const SizedBox(width: 12),
+              //     GenericIconButton(
+              //       icon: Icons.visibility_rounded,
+              //       onPressed: onWatch,
+              //     ),
+              //   ],
+              // )
             ],
           ),
         ),

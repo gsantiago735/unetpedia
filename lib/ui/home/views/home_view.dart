@@ -5,9 +5,9 @@ import 'package:unetpedia/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/core/constants/constants_images.dart';
+import 'package:unetpedia/ui/mentorship/views/mentorships_view.dart';
 import 'package:unetpedia/ui/departments/views/departaments_view.dart';
 import 'package:unetpedia/ui/qualifications/views/qualifications_view.dart';
-import 'package:unetpedia/ui/qualifications/views/tutors_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -88,7 +88,10 @@ class _HomeViewState extends State<HomeView> {
                               "Encuentra tutor para ayuda en cada materia.",
                           asset: ConstantImages.yellowCard,
                           onPressed: () {
-                            Navigator.pushNamed(context, TutorsView.routeName);
+                            Navigator.pushNamed(
+                              context,
+                              MentorshipsView.routeName,
+                            );
                           },
                         ),
                         const SizedBox(height: 20),

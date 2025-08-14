@@ -7,6 +7,7 @@ import 'package:unetpedia/models/generic/career_model.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
 import 'package:unetpedia/models/generic/user_response_model.dart';
 import 'package:unetpedia/models/generic/data_exception_model.dart';
+import 'package:unetpedia/models/mentorship/mentorship_request_model.dart';
 import 'package:unetpedia/models/authentication/register_request_model.dart';
 
 class FirestoreProvider {
@@ -18,6 +19,7 @@ class FirestoreProvider {
   final String _departmentsCollection = "departments";
   final String _subjectsCollection = "subjects";
   final String _filesCollection = "files";
+  final String _mentorshipsCollection = "mentorships";
 
   // ========================================================================
   //  User Collection
@@ -296,6 +298,64 @@ class FirestoreProvider {
             .map((doc) => DocumentModel.fromFirestore(doc))
             .toList(),
       );
+    } on FirebaseException catch (e) {
+      return Left(DataException(details: e.message));
+    } catch (e) {
+      return Left(DataException(details: e.toString()));
+    }
+  }
+
+  // ========================================================================
+  //  Mentorship Collection
+  // ========================================================================
+
+  // Get all mentorships
+  Future<Either<DataException, List<DocumentModel>>> getMentorships() async {
+    try {
+      final QuerySnapshot querySnapshot = await _db
+          .collection(_mentorshipsCollection)
+          .orderBy("created_at")
+          .get();
+
+      return Right(
+        querySnapshot.docs
+            .map((doc) => DocumentModel.fromFirestore(doc))
+            .toList(),
+      );
+    } on FirebaseException catch (e) {
+      return Left(DataException(details: e.message));
+    } catch (e) {
+      return Left(DataException(details: e.toString()));
+    }
+  }
+
+  // Creates a mentorship document
+  Future<Either<DataException, String>> createMentorship({
+    required String userId,
+    required String departmentId,
+    required String subjectId,
+    required MentorshipRequestModel data,
+  }) async {
+    try {
+      final ref = _db.collection(_mentorshipsCollection).doc();
+
+      final departmentRef = _db
+          .collection(_departmentsCollection)
+          .doc(departmentId);
+
+      final subjectRef = departmentRef
+          .collection(_subjectsCollection)
+          .doc(subjectId);
+
+      final parsedData = data.copyWith(
+        owner: _db.collection(_userCollection).doc(userId),
+        department: departmentRef,
+        subject: subjectRef,
+      );
+
+      await ref.set(parsedData.toJsonCreate(id: ref.id));
+
+      return Right("ok");
     } on FirebaseException catch (e) {
       return Left(DataException(details: e.message));
     } catch (e) {

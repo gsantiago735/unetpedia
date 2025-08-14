@@ -115,12 +115,6 @@ class __ViewState extends State<_View> {
                                         ),
                                       );
                                     },
-                                    onDelete: () {
-                                      //Navigator.pushNamed(
-                                      //  context,
-                                      //  SubjectDocumentView.routeName,
-                                      //);
-                                    },
                                   );
                                 },
                                 separatorBuilder: (context, index) =>

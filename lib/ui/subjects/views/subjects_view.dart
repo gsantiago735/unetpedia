@@ -41,7 +41,7 @@ class __ContentState extends State<_Content> {
   @override
   void initState() {
     _cubit = context.read<GeneralCubit>();
-    _cubit.getSubjects();
+    _cubit.getSubjects(_cubit.state.departmentSelected?.id);
     super.initState();
   }
 

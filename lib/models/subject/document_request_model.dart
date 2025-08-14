@@ -55,7 +55,7 @@ class DocumentRequestModel {
   };
 
   Map<String, dynamic> toJsonUpdate() => {
-    'name': name,
+    'description': description,
     'updated_at': DateTime.now(),
   };
 }

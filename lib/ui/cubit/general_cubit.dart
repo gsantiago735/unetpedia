@@ -228,15 +228,12 @@ class GeneralCubit extends Cubit<GeneralState> {
   // Subjects
   // =======================================================================
 
-  // Subjects List with pagination
-  Future<void> getSubjects() async {
-    if (state.departmentSelected?.id == null) return;
+  Future<void> getSubjects(String? departmentId) async {
+    if (departmentId == null) return;
     if (state.subjectsStatus == WidgetStatus.loading) return;
     emit(state.copyWith(subjectsStatus: WidgetStatus.loading));
 
-    final response = await _firestoreProvider.getSubjects(
-      id: state.departmentSelected!.id!,
-    );
+    final response = await _firestoreProvider.getSubjects(id: departmentId);
 
     return response.fold(
       (l) {

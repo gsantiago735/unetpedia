@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unetpedia/ui/ui.dart';
 
-
 class AppRouter {
   static Map<String, Widget Function(BuildContext)> routes = {
     '/': (BuildContext contex) => const App(),
@@ -33,9 +32,9 @@ class AppRouter {
     // Qualification
     QualificationView.routeName: (context) => const QualificationView(),
 
-    //
-    TutorsView.routeName: (context) => const TutorsView(),
-    TutorDetailView.routeName: (context) => const TutorDetailView(),
-
+    // Mentorship
+    MentorshipsView.routeName: (context) => const MentorshipsView(),
+    AddMentorshipView.routeName: (context) => const AddMentorshipView(),
+    MentorshipDetailsView.routeName: (context) => const MentorshipDetailsView(),
   };
 }

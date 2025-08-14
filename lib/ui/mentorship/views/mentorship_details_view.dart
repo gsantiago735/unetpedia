@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unetpedia/widgets/generic_network_image.dart';
 import 'package:unetpedia/widgets/main_appbar.dart';
 import 'package:unetpedia/ui/mentorship/cubit/cubit.dart';
+import 'package:unetpedia/models/mentorship/mentorship_model.dart';
 
 class MentorshipDetailsView extends StatelessWidget {
-  const MentorshipDetailsView({super.key});
+  const MentorshipDetailsView({super.key, this.item});
   static const String routeName = 'mentorship_details_view';
+
+  final MentorshipModel? item;
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +17,15 @@ class MentorshipDetailsView extends StatelessWidget {
       create: (context) => MentorshipCubit(),
       child: Scaffold(
         appBar: MainAppBar(title: "Detalles"),
-        body: _View(),
+        body: _View(item),
       ),
     );
   }
 }
 
 class _View extends StatelessWidget {
-  const _View();
+  const _View(this.item);
+  final MentorshipModel? item;
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +34,17 @@ class _View extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          //ClipRRect(
-          //  borderRadius: BorderRadius.circular(18),
-          //  child: SizedBox(
-          //    height: 160,
-          //    width: double.infinity,
-          //    child: buildImage(args.image),
-          //  ),
-          //),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: SizedBox(
+              height: 160,
+              width: double.infinity,
+              child: GenericNetworkImage(url: item?.ownerUrl),
+            ),
+          ),
           const SizedBox(height: 14),
           Text(
-            "args.name",
+            item?.ownerName ?? "N/A",
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
@@ -48,7 +53,7 @@ class _View extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            "Tutor de asdasdasdasdas",
+            "Tutor de ${item?.subjectName}",
             style: const TextStyle(
               fontSize: 13,
               color: Color(0xFF64748B),
@@ -56,7 +61,7 @@ class _View extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Row(
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _PillButton(text: "Sobre Mí", filled: true, onTap: () {}),
@@ -68,7 +73,7 @@ class _View extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 16),*/
           const Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -89,7 +94,7 @@ class _View extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-              "args.about",
+              item?.description ?? "N/A",
               style: const TextStyle(
                 fontSize: 13,
                 color: Color(0xFF475569),
@@ -97,32 +102,89 @@ class _View extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              _Stat(icon: Icons.access_time, label: "120 h"),
-              _Stat(icon: Icons.groups, label: "100 Estudiantes"),
-              _Stat(icon: Icons.star, label: "4.8 Rating"),
-            ],
+          const SizedBox(height: 8),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Precio",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF0F172A),
+                fontSize: 15,
+              ),
+            ),
           ),
-          const SizedBox(height: 18),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              _CircleIcon(icon: Icons.facebook),
-              SizedBox(width: 14),
-              _CircleIcon(icon: Icons.camera_alt),
-            ],
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Text(
+              "${item?.getPrice} por hora",
+              style: const TextStyle(
+                fontSize: 13,
+                color: Color(0xFF475569),
+                height: 1.35,
+              ),
+            ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 8),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Contacto",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF0F172A),
+                fontSize: 15,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Text(
+              item?.phone ?? "N/A",
+              style: const TextStyle(
+                fontSize: 13,
+                color: Color(0xFF475569),
+                height: 1.35,
+              ),
+            ),
+          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   children: const [
+          //     _Stat(icon: Icons.access_time, label: "120 h"),
+          //     _Stat(icon: Icons.groups, label: "100 Estudiantes"),
+          //     _Stat(icon: Icons.star, label: "4.8 Rating"),
+          //   ],
+          // ),
+          // const SizedBox(height: 18),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: const [
+          //     _CircleIcon(icon: Icons.facebook),
+          //     SizedBox(width: 14),
+          //     _CircleIcon(icon: Icons.camera_alt),
+          //   ],
+          // ),
+          // const SizedBox(height: 24),
         ],
       ),
     );
   }
 }
 
-class _PillButton extends StatelessWidget {
+/*class _PillButton extends StatelessWidget {
   const _PillButton({required this.text, required this.filled, this.onTap});
   final String text;
   final bool filled;
@@ -193,3 +255,4 @@ class _CircleIcon extends StatelessWidget {
     );
   }
 }
+*/

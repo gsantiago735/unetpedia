@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:unetpedia/models/mentorship/mentorship_model.dart';
 import 'package:unetpedia/models/subject/subject.dart';
 import 'package:unetpedia/models/generic/career_model.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
@@ -310,7 +311,7 @@ class FirestoreProvider {
   // ========================================================================
 
   // Get all mentorships
-  Future<Either<DataException, List<DocumentModel>>> getMentorships() async {
+  Future<Either<DataException, List<MentorshipModel>>> getMentorships() async {
     try {
       final QuerySnapshot querySnapshot = await _db
           .collection(_mentorshipsCollection)
@@ -319,7 +320,7 @@ class FirestoreProvider {
 
       return Right(
         querySnapshot.docs
-            .map((doc) => DocumentModel.fromFirestore(doc))
+            .map((doc) => MentorshipModel.fromFirestore(doc))
             .toList(),
       );
     } on FirebaseException catch (e) {

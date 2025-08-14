@@ -7,6 +7,8 @@ import 'package:unetpedia/widgets/loading_indicator.dart';
 import 'package:unetpedia/ui/mentorship/views/views.dart';
 import 'package:unetpedia/ui/mentorship/cubit/cubit.dart';
 import 'package:unetpedia/models/generic/generic_enums.dart';
+import 'package:unetpedia/widgets/generic_network_image.dart';
+import 'package:unetpedia/models/mentorship/mentorship_model.dart';
 import 'package:unetpedia/widgets/buttons/generic_icon_button.dart';
 
 // Listado general de tutorias
@@ -68,20 +70,31 @@ class __ContentState extends State<_Content> {
               children: [
                 const GenericTitle(title: "Tutores Disponibles"),
                 const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: 4,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
-                    ),
-                    itemBuilder: (context, index) {
-                      return _CardComponent();
-                    },
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 16),
-                  ),
-                ),
+                ((state.mentorships ?? []).isEmpty)
+                    ? Expanded(
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Text(
+                              "No hemos encontrado resultados para tu búsqueda.",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.separated(
+                          itemCount: state.mentorships?.length ?? 0,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
+                          itemBuilder: (context, index) =>
+                              _CardComponent(state.mentorships?[index]),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 16),
+                        ),
+                      ),
               ],
             );
           default:
@@ -116,7 +129,9 @@ class _FloatingComponent extends StatelessWidget {
 }
 
 class _CardComponent extends StatelessWidget {
-  const _CardComponent();
+  const _CardComponent(this.item);
+
+  final MentorshipModel? item;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +141,7 @@ class _CardComponent extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return MentorshipDetailsView();
+              return MentorshipDetailsView(item: item);
             },
           ),
         );
@@ -151,7 +166,6 @@ class _CardComponent extends StatelessWidget {
               Container(
                 width: 100,
                 height: 130,
-                padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
@@ -159,16 +173,19 @@ class _CardComponent extends StatelessWidget {
                     width: 2,
                   ),
                 ),
+                child: GenericNetworkImage(
+                  url: item?.ownerUrl,
+                  borderRadius: 10,
+                ),
               ),
               const SizedBox(width: 12),
-              // Nombre + materia
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "tutor.name",
-                      maxLines: 1,
+                      item?.ownerName ?? "N/A",
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 16,
@@ -178,8 +195,8 @@ class _CardComponent extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      "tutor.subject",
-                      maxLines: 1,
+                      item?.subjectName ?? "N/A",
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 13,
@@ -192,7 +209,7 @@ class _CardComponent extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                "price",
+                item?.getPrice ?? "N/A",
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,

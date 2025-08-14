@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unetpedia/models/generic/generic.dart';
-import 'package:unetpedia/models/mentorship/mentorship_request_model.dart';
+import 'package:unetpedia/models/mentorship/mentorship.dart';
 import 'package:unetpedia/models/subject/subject_model.dart';
 import 'package:unetpedia/providers/firestore_provider.dart';
 import 'package:unetpedia/models/subject/department_model.dart';
@@ -37,7 +37,12 @@ class MentorshipCubit extends Cubit<MentorshipState> {
         emit(state.copyWith(genericStatus: WidgetStatus.error, exception: l));
       },
       (r) async {
-        emit(state.copyWith(genericStatus: WidgetStatus.success));
+        emit(
+          state.copyWith(
+            genericStatus: WidgetStatus.success,
+            mentorships: Wrapped.value(r),
+          ),
+        );
       },
     );
   }

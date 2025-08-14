@@ -6,11 +6,14 @@ class MentorshipState extends Equatable {
     this.genericStatus = WidgetStatus.initial,
     this.departmentSelected,
     this.subjectSelected,
+    this.mentorships,
   });
 
   // Generic
   final WidgetStatus genericStatus;
   final DataException? exception;
+
+  final List<MentorshipModel>? mentorships;
 
   // Add mentorship
   final DepartmentModel? departmentSelected;
@@ -22,6 +25,7 @@ class MentorshipState extends Equatable {
     genericStatus,
     departmentSelected,
     subjectSelected,
+    mentorships,
   ];
 
   MentorshipState copyWith({
@@ -29,6 +33,7 @@ class MentorshipState extends Equatable {
     WidgetStatus? genericStatus,
     Wrapped<DepartmentModel?>? departmentSelected,
     Wrapped<SubjectModel?>? subjectSelected,
+    Wrapped<List<MentorshipModel>?>? mentorships,
   }) {
     return MentorshipState(
       exception: exception ?? this.exception,
@@ -39,6 +44,7 @@ class MentorshipState extends Equatable {
       subjectSelected: subjectSelected != null
           ? subjectSelected.value
           : this.subjectSelected,
+      mentorships: mentorships != null ? mentorships.value : this.mentorships,
     );
   }
 }

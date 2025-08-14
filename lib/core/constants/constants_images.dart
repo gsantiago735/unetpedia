@@ -4,4 +4,7 @@ class ConstantImages {
   static const String greenCard = "assets/images/green_card.svg";
   static const String redCard = "assets/images/red_card.svg";
   static const String yellowCard = "assets/images/yellow_card.svg";
+
+  static const String iconFile = "assets/images/icon_file.svg";
+  static const String iconImage = "assets/images/icon_image.svg";
 }

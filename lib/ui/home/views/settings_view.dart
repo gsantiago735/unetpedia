@@ -64,8 +64,12 @@ class SettingsView extends StatelessWidget {
             _ListTile(
               title: "Mis Documentos",
               icon: Icons.description_rounded,
-              onPressed: () =>
-                  Navigator.pushNamed(context, MyDocumentsView.routeName),
+              onPressed: () {
+                context.read<GeneralCubit>().selectDepartment(null);
+                context.read<GeneralCubit>().selectSubject(null);
+
+                Navigator.pushNamed(context, MyDocumentsView.routeName);
+              },
             ),
             const SizedBox(height: 15),
             _ListTile(

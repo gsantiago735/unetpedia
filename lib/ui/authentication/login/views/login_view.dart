@@ -37,6 +37,7 @@ class LoginView extends StatelessWidget {
                 break;
 
               case WidgetStatus.error:
+                Navigator.pop(context);
                 showDialog<void>(
                   context: context,
                   barrierDismissible: false,
